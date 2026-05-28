@@ -26,11 +26,14 @@ const resources = useResourceStore()
 onMounted(async () => {
   if (!resources.loaded) await resources.fetchResources()
   if (!bookings.loaded) await bookings.fetchBookings()
+  await bookings.fetchAnalytics()
 })
 
 const enriched = computed(() => bookings.enrichedBookings(resources.resources))
 const activeBookings = computed(() => enriched.value.filter((booking) => booking.status !== 'cancelled'))
+const analytics = computed(() => bookings.analytics)
 const mostBooked = computed(() => {
+  if (analytics.value.summary?.mostBookedResource) return analytics.value.summary.mostBookedResource
   const counts = activeBookings.value.reduce((acc, booking) => {
     acc[booking.resourceId] = (acc[booking.resourceId] || 0) + 1
     return acc
@@ -39,6 +42,7 @@ const mostBooked = computed(() => {
   return resources.resourceById(id)?.name || 'No data'
 })
 const peakHour = computed(() => {
+  if (analytics.value.summary?.peakHour) return analytics.value.summary.peakHour
   const counts = activeBookings.value.reduce((acc, booking) => {
     acc[booking.startTime] = (acc[booking.startTime] || 0) + 1
     return acc
@@ -47,26 +51,33 @@ const peakHour = computed(() => {
   return hour ? formatTime(hour) : 'No data'
 })
 const resourceUsageChart = computed(() => ({
-  labels: resources.resources.slice(0, 5).map((resource) => resource.name),
+  labels:
+    analytics.value.resourceUsage.length > 0
+      ? analytics.value.resourceUsage.slice(0, 5).map((item) => item.resourceName)
+      : resources.resources.slice(0, 5).map((resource) => resource.name),
   datasets: [
     {
       label: 'Bookings',
       backgroundColor: '#1e3a8a',
       borderRadius: 8,
-      data: resources.resources
-        .slice(0, 5)
-        .map((resource) => activeBookings.value.filter((booking) => booking.resourceId === resource.id).length),
+      data:
+        analytics.value.resourceUsage.length > 0
+          ? analytics.value.resourceUsage.slice(0, 5).map((item) => item.bookings)
+          : resources.resources
+              .slice(0, 5)
+              .map((resource) => activeBookings.value.filter((booking) => booking.resourceId === resource.id).length),
     },
   ],
 }))
 const statusChart = computed(() => {
   const statuses = ['confirmed', 'completed', 'cancelled', 'no-show']
+  const distribution = Object.fromEntries(analytics.value.statusDistribution.map((item) => [item.status, item.count]))
   return {
     labels: statuses.map((status) => status.replace('-', ' ')),
     datasets: [
       {
         backgroundColor: ['#1e3a8a', '#10b981', '#ef4444', '#f59e0b'],
-        data: statuses.map((status) => enriched.value.filter((booking) => booking.status === status).length),
+        data: statuses.map((status) => distribution[status] ?? enriched.value.filter((booking) => booking.status === status).length),
       },
     ],
   }
@@ -100,7 +111,7 @@ const chartOptions = {
     description="Monitor booking activity, resource usage, no-shows, and recent operational changes."
   >
     <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-      <AnalyticsCard label="Bookings" :value="activeBookings.length" helper="All active records">
+      <AnalyticsCard label="Bookings" :value="analytics.summary?.activeBookings ?? activeBookings.length" helper="All active records">
         <template #icon><CalendarDays class="h-5 w-5" /></template>
       </AnalyticsCard>
       <AnalyticsCard label="Most Booked" :value="mostBooked" helper="Resource demand">
@@ -109,10 +120,18 @@ const chartOptions = {
       <AnalyticsCard label="Peak Hour" :value="peakHour" helper="Start time mode">
         <template #icon><Clock3 class="h-5 w-5" /></template>
       </AnalyticsCard>
-      <AnalyticsCard label="Cancelled" :value="enriched.filter((b) => b.status === 'cancelled').length" helper="Released bookings">
+      <AnalyticsCard
+        label="Cancelled"
+        :value="analytics.summary?.cancelledBookings ?? enriched.filter((b) => b.status === 'cancelled').length"
+        helper="Released bookings"
+      >
         <template #icon><XCircle class="h-5 w-5" /></template>
       </AnalyticsCard>
-      <AnalyticsCard label="No-show" :value="enriched.filter((b) => b.status === 'no-show').length" helper="Follow-up needed">
+      <AnalyticsCard
+        label="No-show"
+        :value="analytics.summary?.noShowBookings ?? enriched.filter((b) => b.status === 'no-show').length"
+        helper="Follow-up needed"
+      >
         <template #icon><AlertTriangle class="h-5 w-5" /></template>
       </AnalyticsCard>
     </div>

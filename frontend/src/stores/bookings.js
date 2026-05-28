@@ -1,10 +1,14 @@
 import { defineStore } from 'pinia'
 import { api } from '@/services/api'
-import { generateSuggestions, validateBookingSlot } from '@/utils/booking'
 
 export const useBookingStore = defineStore('bookings', {
   state: () => ({
     bookings: [],
+    analytics: {
+      summary: null,
+      resourceUsage: [],
+      statusDistribution: [],
+    },
     loaded: false,
   }),
   getters: {
@@ -20,11 +24,11 @@ export const useBookingStore = defineStore('bookings', {
       this.bookings = await api.getBookings()
       this.loaded = true
     },
-    checkAvailability(slot) {
-      return validateBookingSlot(slot, this.bookings)
+    async checkAvailability(slot) {
+      return api.checkAvailability(slot)
     },
-    getSuggestions(slot, resources) {
-      return generateSuggestions(slot, resources, this.bookings)
+    async getSuggestions(slot) {
+      return api.getSuggestions(slot)
     },
     async createBooking(payload) {
       const booking = await api.createBooking(payload)
@@ -35,6 +39,10 @@ export const useBookingStore = defineStore('bookings', {
       const updated = await api.updateBookingStatus(id, status)
       this.bookings = this.bookings.map((booking) => (booking.id === id ? updated : booking))
       return updated
+    },
+    async fetchAnalytics() {
+      this.analytics = await api.getAnalytics()
+      return this.analytics
     },
   },
 })

@@ -7,10 +7,14 @@ defineProps({
 })
 
 const styles = {
+  pending: 'bg-secondary-fixed/30 text-on-secondary-fixed-variant',
+  approved: 'bg-primary-fixed text-on-primary-fixed',
+  booked: 'bg-primary-fixed text-on-primary-fixed',
   confirmed: 'bg-primary-fixed text-on-primary-fixed',
   active: 'bg-tertiary-fixed/40 text-on-tertiary-fixed-variant',
   completed: 'bg-tertiary-fixed/50 text-on-tertiary-fixed-variant',
   cancelled: 'bg-error-container text-on-error-container',
+  rejected: 'bg-error-container text-on-error-container',
   inactive: 'bg-surface-container-high text-on-surface-variant',
   maintenance: 'bg-warning/15 text-yellow-800',
   'no-show': 'bg-warning/20 text-yellow-900',

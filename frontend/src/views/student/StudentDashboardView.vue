@@ -20,7 +20,7 @@ onMounted(async () => {
 })
 
 const myBookings = computed(() => bookings.byUser(auth.user.id))
-const upcoming = computed(() => myBookings.value.filter((booking) => booking.status === 'confirmed'))
+const upcoming = computed(() => myBookings.value.filter((booking) => ['pending', 'confirmed'].includes(booking.status)))
 const completed = computed(() => myBookings.value.filter((booking) => booking.status === 'completed'))
 const cancelled = computed(() => myBookings.value.filter((booking) => booking.status === 'cancelled'))
 </script>
@@ -32,7 +32,7 @@ const cancelled = computed(() => myBookings.value.filter((booking) => booking.st
     description="Browse campus resources, check availability, and keep your study schedule organized."
   >
     <div class="grid gap-4 md:grid-cols-3">
-      <AnalyticsCard label="Upcoming" :value="upcoming.length" helper="Confirmed reservations">
+      <AnalyticsCard label="Upcoming" :value="upcoming.length" helper="Pending and confirmed">
         <template #icon><CalendarCheck2 class="h-5 w-5" /></template>
       </AnalyticsCard>
       <AnalyticsCard label="Completed" :value="completed.length" helper="Finished sessions">

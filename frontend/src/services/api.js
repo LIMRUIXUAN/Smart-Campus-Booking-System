@@ -1,77 +1,188 @@
 import axios from 'axios'
-import { demoBookings, demoResources, demoUsers } from '@/data/mockData'
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/mock-api',
-  timeout: 5000,
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8080/api',
+  timeout: 10000,
 })
 
-let resources = [...demoResources]
-let bookings = [...demoBookings]
+client.interceptors.request.use((config) => {
+  const token = localStorage.getItem('campus-token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
 
-const delay = (value) => new Promise((resolve) => setTimeout(() => resolve(value), 120))
+const toTime = (value) => (value ? String(value).slice(0, 5) : value)
+
+const normalizeBooking = (booking) => ({
+  ...booking,
+  date: booking.date || booking.startDate,
+  startTime: toTime(booking.startTime),
+  endTime: toTime(booking.endTime),
+})
+
+const normalizeSuggestion = (suggestion) => ({
+  ...suggestion,
+  date: suggestion.date || suggestion.startDate,
+  startTime: toTime(suggestion.startTime),
+  endTime: toTime(suggestion.endTime),
+})
+
+const normalizeAvailability = (availability) => ({
+  ...availability,
+  suggestions: (availability.suggestions || []).map(normalizeSuggestion),
+  conflict: availability.conflict ? normalizeBooking(availability.conflict) : null,
+})
+
+const normalizeError = (error) => {
+  const response = error.response?.data
+  const message = response?.reason || response?.message || error.message || 'Request failed'
+  const normalized = new Error(message)
+  if (response && Object.prototype.hasOwnProperty.call(response, 'available')) {
+    normalized.availability = normalizeAvailability(response)
+  }
+  normalized.status = error.response?.status
+  return normalized
+}
+
+const currentUserRole = () => {
+  try {
+    return JSON.parse(localStorage.getItem('campus-user') || 'null')?.role
+  } catch {
+    return null
+  }
+}
 
 export const api = {
   client,
 
   async login(email, password) {
-    const user = demoUsers.find((item) => item.email === email && item.password === password)
-    if (!user) {
-      throw new Error('Invalid demo credentials')
+    try {
+      const { data } = await client.post('/auth/login', { email, password })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
     }
-    const { password: _password, ...safeUser } = user
-    return delay({ user: safeUser, token: `demo-token-${safeUser.role}` })
   },
 
   async register(payload) {
-    const user = {
-      id: `u-${Date.now()}`,
-      name: payload.name,
-      email: payload.email,
-      role: 'student',
+    try {
+      const { data } = await client.post('/auth/register', {
+        name: payload.name,
+        email: payload.email,
+        password: payload.password,
+      })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
     }
-    return delay({ user, token: 'demo-token-student' })
   },
 
   async getResources() {
-    return delay([...resources])
+    const { data } = await client.get('/resources')
+    return data
+  },
+
+  async getResource(id) {
+    const { data } = await client.get(`/resources/${id}`)
+    return data
   },
 
   async saveResource(resource) {
-    if (resource.id) {
-      resources = resources.map((item) => (item.id === resource.id ? { ...item, ...resource } : item))
-      return delay(resources.find((item) => item.id === resource.id))
+    const payload = {
+      name: resource.name,
+      type: resource.type,
+      location: resource.location,
+      capacity: Number(resource.capacity),
+      status: resource.status,
+      description: resource.description,
+      features: resource.features || [],
     }
-    const created = { ...resource, id: `r-${Date.now()}`, features: resource.features || [] }
-    resources = [created, ...resources]
-    return delay(created)
+    const { data } = resource.id
+      ? await client.put(`/resources/${resource.id}`, payload)
+      : await client.post('/resources', payload)
+    return data
   },
 
   async deactivateResource(id) {
-    resources = resources.map((item) => (item.id === id ? { ...item, status: 'inactive' } : item))
-    return delay(resources.find((item) => item.id === id))
+    const { data } = await client.delete(`/resources/${id}`)
+    return data
   },
 
   async getBookings() {
-    return delay([...bookings])
+    const endpoint = currentUserRole() === 'admin' ? '/bookings/all' : '/bookings/my'
+    const { data } = await client.get(endpoint)
+    return data.map(normalizeBooking)
+  },
+
+  async checkAvailability(payload) {
+    try {
+      const { data } = await client.get('/availability', {
+        params: {
+          resourceId: payload.resourceId,
+          pax: payload.pax,
+          startDate: payload.startDate || payload.date,
+          startTime: payload.startTime,
+          endDate: payload.endDate || payload.date,
+          endTime: payload.endTime,
+        },
+      })
+      return normalizeAvailability(data)
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async getSuggestions(payload) {
+    const { data } = await client.get('/availability/suggestions', {
+      params: {
+        resourceId: payload.resourceId,
+        pax: payload.pax,
+        startDate: payload.startDate || payload.date,
+        startTime: payload.startTime,
+        endDate: payload.endDate || payload.date,
+        endTime: payload.endTime,
+      },
+    })
+    return data.map(normalizeSuggestion)
   },
 
   async createBooking(payload) {
-    const booking = {
-      ...payload,
-      id: `b-${Date.now()}`,
-      status: 'confirmed',
+    try {
+      const { data } = await client.post('/bookings', {
+        resourceId: payload.resourceId,
+        eventName: payload.eventName,
+        pax: Number(payload.pax),
+        startDate: payload.startDate || payload.date,
+        startTime: payload.startTime,
+        endDate: payload.endDate || payload.date,
+        endTime: payload.endTime,
+      })
+      return normalizeBooking(data)
+    } catch (error) {
+      throw normalizeError(error)
     }
-    bookings = [booking, ...bookings]
-    return delay(booking)
   },
 
   async updateBookingStatus(id, status) {
-    bookings = bookings.map((item) => (item.id === id ? { ...item, status } : item))
-    return delay(bookings.find((item) => item.id === id))
+    const { data } =
+      status === 'cancelled'
+        ? await client.patch(`/bookings/${id}/cancel`)
+        : await client.patch(`/bookings/${id}/status`, { status })
+    return normalizeBooking(data)
   },
 
   async getAnalytics() {
-    return delay({ resources, bookings })
+    const [summary, resourceUsage, statusDistribution] = await Promise.all([
+      client.get('/analytics/summary'),
+      client.get('/analytics/resource-usage'),
+      client.get('/analytics/status-distribution'),
+    ])
+    return {
+      summary: summary.data,
+      resourceUsage: resourceUsage.data,
+      statusDistribution: statusDistribution.data,
+    }
   },
 }

@@ -1,19 +1,66 @@
 # Smart Campus Booking System
 
-Vue 3 frontend for a campus resource booking platform. The app helps students browse and book study rooms, labs, and equipment while giving administrators resource management, booking status controls, and usage analytics.
+Roomio is a full-stack campus resource booking system. Students can browse and reserve rooms, labs, and equipment with backend availability checks. Administrators can manage resources, update booking outcomes, and monitor usage analytics.
 
 ## Stack
 
-- Vue 3 + Vite
-- Tailwind CSS
-- Vue Router
-- Pinia
-- Axios mock API layer
-- Chart.js + vue-chartjs
-- Lucide Vue icons
-- Vitest
+- Frontend: Vue 3, Vite, Pinia, Vue Router, Tailwind CSS, Axios, Chart.js, Vitest
+- Backend: Java 17, Spring Boot 3, Spring Web, Spring Data JPA, Spring Security, JWT, Maven
+- Database: MySQL for runtime, H2 for backend tests
 
-## Setup
+## Project Structure
+
+```text
+backend/      Spring Boot REST API, JPA entities, services, security, tests
+frontend/     Vue 3 application using the backend API
+postman/      API example collection
+SYSTEM_DESIGN.md
+```
+
+## Demo Credentials
+
+```text
+Student: student@campus.test / password
+Admin:   admin@campus.test / password
+```
+
+Seed data is inserted automatically on first backend startup when the database is empty.
+
+## Backend Setup
+
+Create a MySQL database or let the JDBC URL create it:
+
+```sql
+CREATE DATABASE roomio;
+```
+
+Run the backend:
+
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+Default backend URL:
+
+```text
+http://127.0.0.1:8080/api
+```
+
+Backend environment variables:
+
+```text
+DB_URL=jdbc:mysql://localhost:3306/roomio?createDatabaseIfNotExist=true&serverTimezone=UTC
+DB_USERNAME=root
+DB_PASSWORD=
+JWT_SECRET=change-this-to-a-long-random-secret
+JWT_EXPIRATION_MS=86400000
+CORS_ALLOWED_ORIGINS=http://127.0.0.1:5173,http://localhost:5173
+SEED_ENABLED=true
+JPA_DDL_AUTO=update
+```
+
+## Frontend Setup
 
 ```bash
 cd frontend
@@ -21,89 +68,82 @@ npm install
 npm run dev
 ```
 
-Production build:
-
-```bash
-npm run build
-```
-
-Unit tests:
-
-```bash
-npm run test
-```
-
-## Demo Accounts
-
-Student:
+Optional `.env`:
 
 ```text
-student@campus.test / password
+VITE_API_BASE_URL=http://127.0.0.1:8080/api
 ```
 
-Admin:
+## API Summary
 
-```text
-admin@campus.test / password
-```
+Auth:
 
-## Main Pages
+- `POST /api/auth/register`
+- `POST /api/auth/login`
 
-- Landing page: project overview and call-to-action.
-- Login and register: demo role routing.
-- Student dashboard: resource filters, resource cards, quick stats, and upcoming bookings.
-- Resource details: booking form, availability check, conflict warning, and smart suggestions.
-- My bookings: student booking history with cancel/re-book actions.
-- Admin dashboard: analytics cards, resource usage chart, status distribution chart, and recent bookings.
-- Admin resource management: add, edit, filter, and deactivate resources.
-- Admin booking management: filter bookings and mark completed, no-show, or cancelled.
+Resources:
 
-## Folder Structure
+- `GET /api/resources`
+- `GET /api/resources/{id}`
+- `POST /api/resources` admin
+- `PUT /api/resources/{id}` admin
+- `DELETE /api/resources/{id}` admin, deactivates the resource
 
-```text
-frontend/
-  src/
-    components/     Shared UI, layout, resource, and suggestion cards
-    data/           Runtime-relative demo data
-    router/         Vue Router routes and auth guards
-    services/       Thin API layer ready for backend replacement
-    stores/         Pinia auth, resource, and booking stores
-    utils/          Booking validation, conflict detection, and tests
-    views/          Public, student, and admin pages
-```
+Bookings:
+
+- `POST /api/bookings` student
+- `GET /api/bookings/my`
+- `GET /api/bookings/all` admin
+- `PUT /api/bookings/{id}`
+- `PATCH /api/bookings/{id}/cancel`
+- `PATCH /api/bookings/{id}/status` admin
+
+Availability and analytics:
+
+- `GET /api/availability`
+- `GET /api/availability/suggestions`
+- `GET /api/analytics/summary` admin
+- `GET /api/analytics/resource-usage` admin
+- `GET /api/analytics/status-distribution` admin
+
+Import `postman/roomio-api-examples.json` for example requests.
 
 ## Booking Rules
 
-The booking utility enforces:
+The backend `BookingService` is the source of truth:
 
-- Same-resource overlap blocking.
-- Same-user overlap blocking.
-- Maximum 2-hour bookings.
-- Past-slot rejection.
-- Cancelled bookings ignored during conflict checks.
-- Smart suggestions for nearby times and similar resources.
+- Reject past bookings.
+- Require bookings from 30 minutes to 2 hours.
+- Reject inactive resources.
+- Reject pax above resource capacity.
+- Block only overlapping `CONFIRMED` bookings.
+- Block same-resource conflicts.
+- Block same-user conflicts across resources.
+- Allow cancelled slots to be reused.
+- Use `newStart < existingEnd && newEnd > existingStart`.
 
-## Backend Connection Plan
+## Tests And Build
 
-`src/services/api.js` is intentionally thin. Replace the mock methods with Spring Boot endpoints while keeping store methods stable:
+Backend:
 
-- `login`
-- `getResources`
-- `getBookings`
-- `createBooking`
-- `updateBookingStatus`
-- `getAnalytics`
+```bash
+cd backend
+mvn test
+```
 
-## Known Limitations
+Frontend:
 
-- Data is in-memory mock data and resets on page refresh.
-- Authentication is demo-only and stored in local storage.
-- Admin edit/delete actions are simplified for project demonstration.
+```bash
+cd frontend
+npm run lint
+npm run test
+npm run build
+```
 
-## Future Improvements
+## Deployment Notes
 
-- Spring Boot API integration.
-- Calendar grid view for resource availability.
-- Email notifications.
-- QR check-in and no-show automation.
-- Approval workflow for special resources.
+- Keep `JWT_SECRET` outside source control.
+- Use a managed MySQL database in production.
+- Set `CORS_ALLOWED_ORIGINS` to the deployed frontend origin.
+- Build the frontend with `VITE_API_BASE_URL` pointing at the deployed backend.
+- Use `JPA_DDL_AUTO=validate` or migrations for production database management.

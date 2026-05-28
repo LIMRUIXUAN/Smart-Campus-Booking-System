@@ -21,8 +21,12 @@ const submit = async () => {
     error.value = 'Passwords must match.'
     return
   }
-  await auth.register(form.value)
-  router.push({ name: 'student-dashboard' })
+  try {
+    await auth.register(form.value)
+    router.push({ name: 'student-dashboard' })
+  } catch (err) {
+    error.value = err.message
+  }
 }
 </script>
 

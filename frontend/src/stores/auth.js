@@ -30,13 +30,19 @@ export const useAuthStore = defineStore('auth', {
     async register(payload) {
       this.loading = true
       this.error = ''
-      const { user, token } = await api.register(payload)
-      this.user = user
-      this.token = token
-      localStorage.setItem('campus-user', JSON.stringify(user))
-      localStorage.setItem('campus-token', token)
-      this.loading = false
-      return user
+      try {
+        const { user, token } = await api.register(payload)
+        this.user = user
+        this.token = token
+        localStorage.setItem('campus-user', JSON.stringify(user))
+        localStorage.setItem('campus-token', token)
+        return user
+      } catch (error) {
+        this.error = error.message
+        throw error
+      } finally {
+        this.loading = false
+      }
     },
 
     logout() {

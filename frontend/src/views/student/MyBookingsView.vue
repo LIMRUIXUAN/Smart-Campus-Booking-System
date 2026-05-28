@@ -28,7 +28,7 @@ const myBookings = computed(() =>
 )
 
 const counts = computed(() => ({
-  confirmed: myBookings.value.filter((booking) => booking.status === 'confirmed').length,
+  upcoming: myBookings.value.filter((booking) => ['pending', 'confirmed'].includes(booking.status)).length,
   completed: myBookings.value.filter((booking) => booking.status === 'completed').length,
   cancelled: myBookings.value.filter((booking) => booking.status === 'cancelled').length,
 }))
@@ -45,7 +45,7 @@ const cancel = async (booking) => {
     description="Manage upcoming reservations, review past bookings, and cancel slots you no longer need."
   >
     <div class="grid gap-4 md:grid-cols-3">
-      <AnalyticsCard label="Upcoming" :value="counts.confirmed" helper="Active bookings">
+      <AnalyticsCard label="Upcoming" :value="counts.upcoming" helper="Pending and confirmed">
         <template #icon><CalendarCheck2 class="h-5 w-5" /></template>
       </AnalyticsCard>
       <AnalyticsCard label="Completed" :value="counts.completed" helper="Past sessions">
@@ -87,9 +87,9 @@ const cancel = async (booking) => {
             </div>
           </div>
           <div class="flex gap-2 md:justify-end">
-            <BaseButton v-if="booking.status === 'confirmed'" variant="secondary">Edit</BaseButton>
-            <BaseButton v-if="booking.status === 'confirmed'" variant="danger" @click="cancel(booking)">Cancel</BaseButton>
-            <RouterLink v-if="booking.status !== 'confirmed'" :to="{ name: 'resource-details', params: { id: booking.resourceId } }">
+            <BaseButton v-if="['pending', 'confirmed'].includes(booking.status)" variant="secondary">Edit</BaseButton>
+            <BaseButton v-if="['pending', 'confirmed'].includes(booking.status)" variant="danger" @click="cancel(booking)">Cancel</BaseButton>
+            <RouterLink v-if="!['pending', 'confirmed'].includes(booking.status)" :to="{ name: 'resource-details', params: { id: booking.resourceId } }">
               <BaseButton variant="secondary">Re-book</BaseButton>
             </RouterLink>
           </div>
