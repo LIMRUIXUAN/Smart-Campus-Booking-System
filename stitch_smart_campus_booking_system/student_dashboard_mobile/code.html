@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mobile Student Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e0e3e5",
+                        "surface-bright": "#f7f9fb",
+                        "error": "#ba1a1a",
+                        "tertiary": "#00311f",
+                        "primary-fixed": "#dce1ff",
+                        "on-tertiary-container": "#27c38a",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#acedff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "primary-container": "#1e3a8a",
+                        "on-background": "#191c1e",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface-variant": "#444651",
+                        "background": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-tint": "#4059aa",
+                        "on-secondary-container": "#006172",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#002113",
+                        "outline": "#757682",
+                        "primary": "#00236f",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-fixed-variant": "#264191",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "surface-dim": "#d8dadc",
+                        "on-primary-fixed": "#00164e",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary": "#00687a",
+                        "outline-variant": "#c5c5d3",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-primary": "#b6c4ff",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#57dffe",
+                        "on-primary-container": "#90a8ff",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed": "#001f26",
+                        "inverse-surface": "#2d3133",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "surface": "#f7f9fb",
+                        "tertiary-container": "#004a31",
+                        "on-surface": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "2xl": "48px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "container-max": "1440px",
+                        "sm": "12px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(30, 58, 138, 0.05);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased flex flex-col h-screen md:hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-lg py-sm bg-surface-container-lowest shadow-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 duration-200" data-icon="menu">menu</span>
+<h1 class="font-title-sm text-title-sm text-primary">CampusResource</h1>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors active:scale-95 duration-200" data-icon="notifications">notifications</span>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant cursor-pointer active:scale-95 duration-200" data-alt="A close up portrait of a young professional student with a neutral expression, brightly lit against a light grey background, clear focus and modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7SdJZRAkNZYD3Q2IyDPQRIm9fi0TecLWZGnyWWqH2pR0v_-jDIAa_2s-ahl6GmN_RL_idtjcSoUvxIITQgAB3tou9DYgAz3RNwqWTGDsQCCm3XrwTj-KR5IoPLKEundov1iTHDaynHxl-Qbr1VQixnU__xwEnZl5BJLB7oVoO1H33N6gBphwkMBAJW6iF5sQA1YOjfHV0512a5sGP_g8RmVdQKPflVtAAGfyZBPdeQAv9gl8zjUszEPsrRbNjG-hKZ0k_KCfyThcr"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto px-md py-lg flex flex-col gap-lg pb-[100px]">
+<!-- Welcome Section -->
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Hello, Alex</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Here is your quick overview for today.</p>
+</div>
+<!-- Quick Stats (Stacked) -->
+<div class="flex flex-col gap-sm">
+<!-- Upcoming -->
+<div class="bg-surface-container-lowest rounded-xl p-md flex items-center justify-between ambient-shadow">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="event">event</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Upcoming</p>
+<p class="font-title-sm text-title-sm text-on-surface">2 Bookings</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Completed -->
+<div class="bg-surface-container-lowest rounded-xl p-md flex items-center justify-between ambient-shadow">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Completed</p>
+<p class="font-title-sm text-title-sm text-on-surface">14 Sessions</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Cancelled -->
+<div class="bg-surface-container-lowest rounded-xl p-md flex items-center justify-between ambient-shadow">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="cancel">cancel</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Cancelled</p>
+<p class="font-title-sm text-title-sm text-on-surface">1 Session</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Section Header -->
+<div class="flex items-center justify-between mt-sm">
+<h3 class="font-title-sm text-title-sm text-on-surface">Available Resources</h3>
+<button class="font-body-sm text-body-sm text-primary hover:underline">View All</button>
+</div>
+<!-- Resource Cards -->
+<div class="flex flex-col gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-lg ambient-shadow flex flex-col gap-md">
+<div class="h-32 rounded-xl bg-surface-variant w-full overflow-hidden relative">
+<img alt="Study Room" class="w-full h-full object-cover" data-alt="A modern university study room with bright natural light coming through large windows, featuring a sleek wooden table, comfortable ergonomic chairs, and a minimalist white board on the wall. Clean, academic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnkT0ROfeAdP68kVVHzHAVpJgeugKZ9Ymyr9qrQI1zrp19V-x1K10yhoZJBiod6GWNhblwTCfQzRnKnGxxL36QJGv8eliijj4ZvMIvhKdA7qE8sykbxiLFL903CyE-ds_nH4LHe0r_-Yx5g0mzmIzhbMesxMwxSUK-7y_o_CzShJGKvqw5OsbjTn-s-_BDgh79_NHRJNNauygDuESbeX1vqz9bSJ9prkHZ4fusxP3cP33O_OaVl483EjesRjBD8fr4gmbKTzBn3T2x"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/90 px-xs py-base rounded-md flex items-center gap-base backdrop-blur-sm">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="group">group</span>
+<span class="font-label-caps text-label-caps text-on-surface">4 Seats</span>
+</div>
+</div>
+<div>
+<h4 class="font-title-sm text-title-sm text-on-surface">Study Room A</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Main Library, 2nd Floor</p>
+</div>
+<div class="flex flex-wrap gap-xs">
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-sm py-base rounded-[8px]">Projector</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-sm py-base rounded-[8px]">Whiteboard</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-sm py-base rounded-[8px]">Power Outlets</span>
+</div>
+<button class="w-full bg-[#1E3A8A] text-on-primary font-body-md text-body-md py-sm rounded-lg hover:bg-primary transition-colors active:scale-95 duration-200 mt-sm">Book Now</button>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-lg ambient-shadow flex flex-col gap-md">
+<div class="h-32 rounded-xl bg-surface-variant w-full overflow-hidden relative">
+<img alt="Media Lab" class="w-full h-full object-cover" data-alt="A high-tech media lab with dual-monitor computer setups lined along modern desks, illuminated by soft blue ambient lighting and overhead daylight balanced panels. A clean, professional technology environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpJf7E7BoPrj6q4ojDC7IWmkxcy4dJcPb-TTduMKKUnXjcTnwCvB_XlVEIVNWUwH5IkCARFR0DpPmQHk8vDYHclm_d3uhwd0KIWug0A4y8BBui1INcRySZ-ygms-9h1RhZcpiTAB-MeTHyyjvtbVNnTnz3rol1Je4x7iW-9g-ZKAwRW7yoO-p6Z52lZ9_aajdqFM0fqgUKxoXyP_iYEfaSlLhN3QQQTEojrnI2vQzRUIUKbnJca55KB_HscRc5luXqYLyxm47aiICN"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/90 px-xs py-base rounded-md flex items-center gap-base backdrop-blur-sm">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="computer">computer</span>
+<span class="font-label-caps text-label-caps text-on-surface">Mac Studio</span>
+</div>
+</div>
+<div>
+<h4 class="font-title-sm text-title-sm text-on-surface">Media Edit Bay 3</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Arts Building, B1</p>
+</div>
+<div class="flex flex-wrap gap-xs">
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-sm py-base rounded-[8px]">Adobe CC</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-sm py-base rounded-[8px]">Dual Monitors</span>
+</div>
+<button class="w-full bg-[#1E3A8A] text-on-primary font-body-md text-body-md py-sm rounded-lg hover:bg-primary transition-colors active:scale-95 duration-200 mt-sm">Book Now</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile specific, inferred from SideNav structure/content) -->
+<nav class="fixed bottom-0 w-full bg-surface-container-lowest border-t border-surface-container-high flex justify-around items-center py-sm pb-lg px-md z-50">
+<!-- Dashboard (Active) -->
+<div class="flex flex-col items-center gap-base cursor-pointer active:scale-95 transition-transform">
+<div class="bg-primary-container px-md py-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="dashboard">dashboard</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">Dashboard</span>
+</div>
+<!-- Resources -->
+<div class="flex flex-col items-center gap-base cursor-pointer active:scale-95 transition-transform group">
+<div class="px-md py-1 rounded-full flex items-center justify-center group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="inventory_2">inventory_2</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Resources</span>
+</div>
+<!-- My Bookings -->
+<div class="flex flex-col items-center gap-base cursor-pointer active:scale-95 transition-transform group">
+<div class="px-md py-1 rounded-full flex items-center justify-center group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="event_note">event_note</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">My Bookings</span>
+</div>
+<!-- Settings -->
+<div class="flex flex-col items-center gap-base cursor-pointer active:scale-95 transition-transform group">
+<div class="px-md py-1 rounded-full flex items-center justify-center group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="settings">settings</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Settings</span>
+</div>
+</nav>
+</body></html>

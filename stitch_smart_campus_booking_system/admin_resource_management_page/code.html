@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ResourceHub - Resource Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f2f4f6",
+                    "secondary": "#00687a",
+                    "background": "#f7f9fb",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#444651",
+                    "on-background": "#191c1e",
+                    "inverse-on-surface": "#eff1f3",
+                    "inverse-primary": "#b6c4ff",
+                    "outline": "#757682",
+                    "secondary-fixed": "#acedff",
+                    "on-primary-container": "#90a8ff",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d8dadc",
+                    "surface-container": "#eceef0",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-fixed": "#6ffbbe",
+                    "primary-fixed": "#dce1ff",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#004a31",
+                    "surface-container-highest": "#e0e3e5",
+                    "tertiary": "#00311f",
+                    "surface-variant": "#e0e3e5",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "on-tertiary-container": "#27c38a",
+                    "on-secondary-container": "#006172",
+                    "on-primary-fixed": "#00164e",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "primary": "#00236f",
+                    "secondary-container": "#57dffe",
+                    "surface-tint": "#4059aa",
+                    "primary-container": "#1e3a8a",
+                    "on-primary-fixed-variant": "#264191",
+                    "inverse-surface": "#2d3133",
+                    "surface-bright": "#f7f9fb",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#c5c5d3",
+                    "surface": "#f7f9fb",
+                    "on-secondary-fixed": "#001f26",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#191c1e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "base": "4px",
+                    "sm": "12px",
+                    "container-max": "1440px",
+                    "2xl": "48px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "xs": "8px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "title-sm": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "display-lg-mobile": [
+                            "Inter"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "36px",
+                            {
+                                    "lineHeight": "44px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "title-sm": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "34px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .shadow-level-1 {
+            box-shadow: 0px 4px 20px rgba(30, 58, 138, 0.05);
+        }
+        .shadow-level-2 {
+            box-shadow: 0px 8px 30px rgba(30, 58, 138, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex flex-col h-screen p-md gap-xs border-r border-outline-variant bg-surface-container-low w-64 shrink-0 transition-transform duration-200 ease-in-out z-40 relative">
+<div class="flex items-center gap-sm mb-lg px-xs">
+<div aria-label="Campus Logo" class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight leading-tight">ResourceHub</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-none mt-1">University Portal</p>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary rounded-lg py-sm px-md flex items-center justify-center gap-xs hover:bg-on-primary-fixed-variant transition-colors mb-md shadow-sm">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-caps text-label-caps tracking-wider">New Booking</span>
+</button>
+<div class="flex-1 flex flex-col gap-xs overflow-y-auto">
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-caps text-label-caps">Resources</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-label-caps text-label-caps">My Bookings</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg transition-all bg-primary-container text-on-primary-container font-bold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
+<span class="font-label-caps text-label-caps">Resource Management</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-label-caps text-label-caps">Booking Management</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps">Analytics</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-xs pt-md border-t border-outline-variant">
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-label-caps text-label-caps">Help</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar (Mobile Only conceptually based on rules, but keeping header structural logic for main canvas) -->
+<header class="md:hidden sticky top-0 z-50 flex justify-between items-center w-full px-lg py-sm bg-surface-container-lowest shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="text-title-sm font-title-sm text-primary font-bold">ResourceHub</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-md md:p-2xl w-full max-w-[1440px] mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-lg mb-lg">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-background mb-base hidden md:block">Resource Management</h2>
+<h2 class="font-display-lg-mobile text-display-lg-mobile text-on-background mb-base md:hidden">Resource Management</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Manage campus facilities, rooms, and equipment available for booking.</p>
+</div>
+<div class="flex gap-sm">
+<button class="bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg py-sm px-md flex items-center gap-xs hover:bg-surface-container-low transition-colors shadow-sm font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export
+                    </button>
+<button class="bg-primary text-on-primary rounded-lg py-sm px-md flex items-center gap-xs hover:bg-on-primary-fixed-variant transition-colors shadow-sm font-label-caps text-label-caps" onclick="openModal('addResourceModal')">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                        Add Resource
+                    </button>
+</div>
+</div>
+<!-- Filters & Search Bar -->
+<div class="bg-surface-container-lowest rounded-xl shadow-level-1 p-lg mb-lg flex flex-col lg:flex-row gap-lg items-start lg:items-center justify-between border border-surface-variant/50">
+<div class="w-full lg:max-w-md relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-[40px] pr-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-shadow font-body-md text-body-md" placeholder="Search resources..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-sm w-full lg:w-auto">
+<select class="px-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed font-body-md text-body-md pr-xl appearance-none cursor-pointer">
+<option value="">All Types</option>
+<option value="room">Room</option>
+<option value="equipment">Equipment</option>
+<option value="lab">Lab Space</option>
+</select>
+<select class="px-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed font-body-md text-body-md pr-xl appearance-none cursor-pointer">
+<option value="">All Statuses</option>
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+<option value="maintenance">Maintenance</option>
+</select>
+<button class="text-primary font-label-caps text-label-caps px-sm py-sm hover:bg-primary-fixed-dim/20 rounded-lg transition-colors ml-auto lg:ml-0">
+                        Clear Filters
+                    </button>
+</div>
+</div>
+<!-- Bento Grid style Data Presentation (Moving away from standard table for higher-end feel) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Resource Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-level-1 p-lg border border-surface-variant/50 flex flex-col group hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary-container"></div>
+<div class="flex justify-between items-start mb-md">
+<div>
+<div class="flex items-center gap-xs mb-base">
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-xs py-1 rounded-full text-[10px]">Room</span>
+<span class="bg-tertiary-container/10 text-tertiary-container font-label-caps text-label-caps px-xs py-1 rounded-full text-[10px] flex items-center gap-[2px]">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                                    Active
+                                </span>
+</div>
+<h3 class="font-title-sm text-title-sm text-on-surface">Study Room A</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-xs mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Main Library, Floor 2
+                            </p>
+</div>
+<div class="relative">
+<button class="text-on-surface-variant hover:text-primary p-1 rounded-full hover:bg-surface-container-high transition-colors" onclick="toggleDropdown('menu-1')">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+<!-- Dropdown Menu -->
+<div class="hidden absolute right-0 mt-1 w-48 bg-surface-container-lowest rounded-lg shadow-level-2 border border-outline-variant py-1 z-10" id="menu-1">
+<button class="w-full text-left px-sm py-sm text-body-sm text-on-surface hover:bg-surface-container-high flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                                </button>
+<button class="w-full text-left px-sm py-sm text-body-sm text-on-surface hover:bg-surface-container-high flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">block</span> Deactivate
+                                </button>
+<div class="h-[1px] bg-outline-variant/50 my-1"></div>
+<button class="w-full text-left px-sm py-sm text-body-sm text-error hover:bg-error-container/20 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">delete</span> Delete
+                                </button>
+</div>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-sm pt-md border-t border-outline-variant/50">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Capacity</p>
+<p class="font-body-md text-body-md text-on-surface flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px] text-outline">group</span> 4 Seats
+                            </p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Features</p>
+<div class="flex gap-1">
+<span class="w-6 h-6 rounded bg-surface-container flex items-center justify-center text-on-surface-variant tooltip-trigger" title="Whiteboard">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+</span>
+<span class="w-6 h-6 rounded bg-surface-container flex items-center justify-center text-on-surface-variant tooltip-trigger" title="Power Outlets">
+<span class="material-symbols-outlined text-[14px]">power</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Resource Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-level-1 p-lg border border-surface-variant/50 flex flex-col group hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary-container"></div>
+<div class="flex justify-between items-start mb-md">
+<div>
+<div class="flex items-center gap-xs mb-base">
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-xs py-1 rounded-full text-[10px]">Equipment</span>
+<span class="bg-tertiary-container/10 text-tertiary-container font-label-caps text-label-caps px-xs py-1 rounded-full text-[10px] flex items-center gap-[2px]">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                                    Active
+                                </span>
+</div>
+<h3 class="font-title-sm text-title-sm text-on-surface">4K Projector Pro</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-xs mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> IT Helpdesk, Bldg 4
+                            </p>
+</div>
+<div class="relative">
+<button class="text-on-surface-variant hover:text-primary p-1 rounded-full hover:bg-surface-container-high transition-colors" onclick="toggleDropdown('menu-2')">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+<div class="hidden absolute right-0 mt-1 w-48 bg-surface-container-lowest rounded-lg shadow-level-2 border border-outline-variant py-1 z-10" id="menu-2">
+<button class="w-full text-left px-sm py-sm text-body-sm text-on-surface hover:bg-surface-container-high flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                                </button>
+<button class="w-full text-left px-sm py-sm text-body-sm text-on-surface hover:bg-surface-container-high flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">block</span> Deactivate
+                                </button>
+<div class="h-[1px] bg-outline-variant/50 my-1"></div>
+<button class="w-full text-left px-sm py-sm text-body-sm text-error hover:bg-error-container/20 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">delete</span> Delete
+                                </button>
+</div>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-sm pt-md border-t border-outline-variant/50">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Stock</p>
+<p class="font-body-md text-body-md text-on-surface flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px] text-outline">inventory</span> 3 Units
+                            </p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Requires</p>
+<p class="font-body-sm text-body-sm text-on-surface">Faculty ID</p>
+</div>
+</div>
+</div>
+<!-- Resource Card 3 (Inactive) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-level-1 p-lg border border-surface-variant/50 flex flex-col group hover:shadow-md transition-shadow relative overflow-hidden opacity-80">
+<div class="absolute top-0 left-0 w-1 h-full bg-outline"></div>
+<div class="flex justify-between items-start mb-md">
+<div>
+<div class="flex items-center gap-xs mb-base">
+<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps px-xs py-1 rounded-full text-[10px]">Lab</span>
+<span class="bg-outline/10 text-outline font-label-caps text-label-caps px-xs py-1 rounded-full text-[10px] flex items-center gap-[2px]">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                    Inactive
+                                </span>
+</div>
+<h3 class="font-title-sm text-title-sm text-on-surface">Chemistry Lab B</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-xs mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Science Block, Floor 1
+                            </p>
+</div>
+<div class="relative">
+<button class="text-on-surface-variant hover:text-primary p-1 rounded-full hover:bg-surface-container-high transition-colors" onclick="toggleDropdown('menu-3')">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+<div class="hidden absolute right-0 mt-1 w-48 bg-surface-container-lowest rounded-lg shadow-level-2 border border-outline-variant py-1 z-10" id="menu-3">
+<button class="w-full text-left px-sm py-sm text-body-sm text-on-surface hover:bg-surface-container-high flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                                </button>
+<button class="w-full text-left px-sm py-sm text-body-sm text-on-surface hover:bg-surface-container-high flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">check_circle</span> Activate
+                                </button>
+<div class="h-[1px] bg-outline-variant/50 my-1"></div>
+<button class="w-full text-left px-sm py-sm text-body-sm text-error hover:bg-error-container/20 flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">delete</span> Delete
+                                </button>
+</div>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-sm pt-md border-t border-outline-variant/50">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Capacity</p>
+<p class="font-body-md text-body-md text-on-surface flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px] text-outline">group</span> 20 Seats
+                            </p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">Notes</p>
+<p class="font-body-sm text-body-sm text-on-surface truncate" title="Undergoing maintenance until Fall term">Undergoing mainte...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination (Simple) -->
+<div class="flex items-center justify-between mt-lg pt-md border-t border-outline-variant/50">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Showing 1-3 of 45 resources</p>
+<div class="flex gap-sm">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+<!-- Modal for Add Resource -->
+<div class="fixed inset-0 bg-on-background/40 backdrop-blur-sm hidden z-50 flex items-center justify-center p-md opacity-0 transition-opacity duration-300" id="addResourceModal">
+<div class="bg-surface-container-lowest rounded-xl shadow-level-2 w-full max-w-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="modalContent">
+<div class="flex justify-between items-center p-lg border-b border-outline-variant/50">
+<h3 class="font-headline-md text-headline-md text-on-background">Add New Resource</h3>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-full hover:bg-surface-container-high" onclick="closeModal('addResourceModal')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-lg overflow-y-auto max-h-[716px]">
+<form class="space-y-lg">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Resource Name <span class="text-error">*</span></label>
+<input class="w-full px-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md" placeholder="e.g. Study Room B" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Type <span class="text-error">*</span></label>
+<select class="w-full px-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed font-body-md text-body-md appearance-none">
+<option disabled="" selected="" value="">Select Type</option>
+<option value="room">Room</option>
+<option value="equipment">Equipment</option>
+<option value="lab">Lab Space</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Location</label>
+<input class="w-full px-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md" placeholder="e.g. Main Library, Floor 2" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Capacity</label>
+<input class="w-full px-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md" placeholder="e.g. 4" type="number"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Description</label>
+<textarea class="w-full px-sm py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md resize-none" placeholder="Additional details about the resource..." rows="3"></textarea>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Status</label>
+<div class="flex gap-md">
+<label class="flex items-center gap-sm cursor-pointer">
+<input checked="" class="w-4 h-4 text-primary focus:ring-primary border-outline-variant" name="status" type="radio" value="active"/>
+<span class="font-body-md text-body-md text-on-surface">Active</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer">
+<input class="w-4 h-4 text-primary focus:ring-primary border-outline-variant" name="status" type="radio" value="inactive"/>
+<span class="font-body-md text-body-md text-on-surface">Inactive</span>
+</label>
+</div>
+</div>
+</form>
+</div>
+<div class="p-lg border-t border-outline-variant/50 bg-surface-container-low flex justify-end gap-sm">
+<button class="px-md py-sm rounded-lg font-label-caps text-label-caps text-on-surface-variant hover:bg-surface-container-highest transition-colors" onclick="closeModal('addResourceModal')">
+                    Cancel
+                </button>
+<button class="bg-primary text-on-primary rounded-lg py-sm px-md hover:bg-on-primary-fixed-variant transition-colors shadow-sm font-label-caps text-label-caps">
+                    Save Resource
+                </button>
+</div>
+</div>
+</div>
+<script>
+        function toggleDropdown(id) {
+            // Close all other dropdowns first
+            document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+                if(menu.id !== id) menu.classList.add('hidden');
+            });
+            const menu = document.getElementById(id);
+            menu.classList.toggle('hidden');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = event.target.closest('[id^="menu-"]');
+            const isClickOnButton = event.target.closest('button[onclick^="toggleDropdown"]');
+            
+            if (!isClickInsideMenu && !isClickOnButton) {
+                document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+                    menu.classList.add('hidden');
+                });
+            }
+        });
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            const content = modal.querySelector('#modalContent');
+            modal.classList.remove('hidden');
+            // Small delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const content = modal.querySelector('#modalContent');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            
+            // Wait for transition to finish before hiding
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body></html>

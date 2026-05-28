@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Bookings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e0e3e5",
+                        "surface-bright": "#f7f9fb",
+                        "error": "#ba1a1a",
+                        "tertiary": "#00311f",
+                        "primary-fixed": "#dce1ff",
+                        "on-tertiary-container": "#27c38a",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#acedff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "primary-container": "#1e3a8a",
+                        "on-background": "#191c1e",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface-variant": "#444651",
+                        "background": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-tint": "#4059aa",
+                        "on-secondary-container": "#006172",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#002113",
+                        "outline": "#757682",
+                        "primary": "#00236f",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-fixed-variant": "#264191",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "surface-dim": "#d8dadc",
+                        "on-primary-fixed": "#00164e",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary": "#00687a",
+                        "outline-variant": "#c5c5d3",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-primary": "#b6c4ff",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#57dffe",
+                        "on-primary-container": "#90a8ff",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed": "#001f26",
+                        "inverse-surface": "#2d3133",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "surface": "#f7f9fb",
+                        "tertiary-container": "#004a31",
+                        "on-surface": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "2xl": "48px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "container-max": "1440px",
+                        "sm": "12px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .ambient-shadow-level-1 {
+            box-shadow: 0px 4px 20px rgba(30, 58, 138, 0.05);
+        }
+        .ambient-shadow-nav {
+            box-shadow: 0px -4px 20px rgba(30, 58, 138, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-[80px]">
+<!-- Mobile Top App Bar -->
+<header class="sticky top-0 z-40 bg-background/80 backdrop-blur-md px-md py-sm flex justify-between items-center w-full">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary">My Bookings</h1>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-lowest ambient-shadow-level-1 text-on-surface-variant active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="px-md flex flex-col gap-lg mt-md">
+<!-- Stats Overview -->
+<section class="grid grid-cols-3 gap-xs">
+<div class="bg-surface-container-lowest ambient-shadow-level-1 rounded-lg p-sm flex flex-col items-center justify-center text-center gap-base">
+<span class="font-headline-md text-headline-md text-primary">12</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Total</span>
+</div>
+<div class="bg-surface-container-lowest ambient-shadow-level-1 rounded-lg p-sm flex flex-col items-center justify-center text-center gap-base">
+<span class="font-headline-md text-headline-md text-secondary">3</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Upcoming</span>
+</div>
+<div class="bg-surface-container-lowest ambient-shadow-level-1 rounded-lg p-sm flex flex-col items-center justify-center text-center gap-base">
+<span class="font-headline-md text-headline-md text-on-tertiary-container">9</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Completed</span>
+</div>
+</section>
+<!-- Search Bar -->
+<section>
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="search">search</span>
+<input class="w-full bg-surface-container-lowest ambient-shadow-level-1 rounded-lg py-sm pl-xl pr-md border border-outline-variant/30 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none font-body-md text-body-md text-on-background placeholder:text-outline transition-all" placeholder="Search resources or dates..." type="text"/>
+</div>
+</section>
+<!-- Bookings List -->
+<section class="flex flex-col gap-md">
+<!-- Card 1: Upcoming -->
+<article class="bg-surface-container-lowest ambient-shadow-level-1 rounded-xl p-lg flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-title-sm text-title-sm text-on-background">Study Room 402</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-base">Library North Wing</p>
+</div>
+<span class="px-xs py-base rounded-lg bg-primary/10 text-primary font-label-caps text-label-caps inline-flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Confirmed
+                    </span>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-body-sm text-body-sm">Oct 24, 2023</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-body-sm text-body-sm">10:00 AM - 12:00 PM</span>
+</div>
+</div>
+<div class="flex gap-xs mt-sm">
+<button class="flex-1 py-xs rounded-lg border border-outline-variant text-on-surface-variant font-title-sm text-title-sm active:bg-surface-container-low transition-colors">Cancel</button>
+<button class="flex-1 py-xs rounded-lg bg-primary text-on-primary font-title-sm text-title-sm active:bg-primary-container transition-colors">Modify</button>
+</div>
+</article>
+<!-- Card 2: Upcoming Device -->
+<article class="bg-surface-container-lowest ambient-shadow-level-1 rounded-xl p-lg flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-title-sm text-title-sm text-on-background">Projector Pro-X</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-base">AV Equipment Room</p>
+</div>
+<span class="px-xs py-base rounded-lg bg-primary/10 text-primary font-label-caps text-label-caps inline-flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Confirmed
+                    </span>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-body-sm text-body-sm">Oct 25, 2023</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-body-sm text-body-sm">02:00 PM - 05:00 PM</span>
+</div>
+</div>
+<div class="flex gap-xs mt-sm">
+<button class="flex-1 py-xs rounded-lg border border-outline-variant text-on-surface-variant font-title-sm text-title-sm active:bg-surface-container-low transition-colors">Cancel</button>
+<button class="flex-1 py-xs rounded-lg bg-primary text-on-primary font-title-sm text-title-sm active:bg-primary-container transition-colors">Modify</button>
+</div>
+</article>
+<!-- Card 3: Completed -->
+<article class="bg-surface-container-lowest ambient-shadow-level-1 rounded-xl p-lg flex flex-col gap-md opacity-80">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-title-sm text-title-sm text-on-background">Conference Hall B</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-base">Main Building, Floor 2</p>
+</div>
+<span class="px-xs py-base rounded-lg bg-tertiary/10 text-tertiary font-label-caps text-label-caps inline-flex items-center gap-base">
+<span class="material-symbols-outlined text-[14px]" data-icon="task_alt" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+                        Completed
+                    </span>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-body-sm text-body-sm">Oct 20, 2023</span>
+</div>
+</div>
+<div class="flex gap-xs mt-sm">
+<button class="w-full py-xs rounded-lg bg-surface-container-low text-on-surface-variant font-title-sm text-title-sm active:bg-surface-variant transition-colors">Book Again</button>
+</div>
+</article>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Mobile Shell) -->
+<nav class="fixed bottom-0 w-full h-[80px] bg-surface-container-lowest ambient-shadow-nav z-50 flex justify-around items-center pb-2 md:hidden">
+<a class="flex flex-col items-center justify-center gap-1 w-full h-full text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 w-full h-full text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-caps text-label-caps">Resources</span>
+</a>
+<!-- Active Tab -->
+<a class="flex flex-col items-center justify-center gap-1 w-full h-full text-primary cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="event_note" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span class="font-label-caps text-label-caps font-bold">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 w-full h-full text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+</body></html>

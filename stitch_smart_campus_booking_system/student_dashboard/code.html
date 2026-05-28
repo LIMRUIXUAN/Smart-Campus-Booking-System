@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Dashboard - CampusResource</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#00687a",
+                        "background": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444651",
+                        "on-background": "#191c1e",
+                        "inverse-on-surface": "#eff1f3",
+                        "inverse-primary": "#b6c4ff",
+                        "outline": "#757682",
+                        "secondary-fixed": "#acedff",
+                        "on-primary-container": "#90a8ff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "primary-fixed": "#dce1ff",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#004a31",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary": "#00311f",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-tertiary-container": "#27c38a",
+                        "on-secondary-container": "#006172",
+                        "on-primary-fixed": "#00164e",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#00236f",
+                        "secondary-container": "#57dffe",
+                        "surface-tint": "#4059aa",
+                        "primary-container": "#1e3a8a",
+                        "on-primary-fixed-variant": "#264191",
+                        "inverse-surface": "#2d3133",
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c5c5d3",
+                        "surface": "#f7f9fb",
+                        "on-secondary-fixed": "#001f26",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sm": "12px",
+                        "container-max": "1440px",
+                        "2xl": "48px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "xs": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .level-1-shadow { box-shadow: 0px 4px 20px rgba(30, 58, 138, 0.05); }
+        .soft-fill-confirmed { background-color: rgba(0, 35, 111, 0.1); color: #00236f; }
+        .soft-fill-completed { background-color: rgba(0, 49, 31, 0.1); color: #00311f; }
+        .soft-fill-cancelled { background-color: rgba(186, 26, 26, 0.1); color: #ba1a1a; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased flex">
+<!-- SideNavBar (from JSON) -->
+<nav class="hidden md:flex flex-col h-screen p-md gap-xs border-r border-outline-variant bg-surface-container-low docked left-0 h-screen w-64 flat no shadows flex-shrink-0">
+<div class="mb-lg px-sm">
+<h1 class="text-headline-md font-headline-md text-primary">ResourceHub</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">University Portal</p>
+</div>
+<button class="bg-primary-container text-on-primary-container rounded-lg py-sm px-md flex items-center justify-center gap-xs font-title-sm text-title-sm mb-md hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+            New Booking
+        </button>
+<div class="flex-1 flex flex-col gap-base">
+<a class="flex items-center gap-md px-sm py-sm bg-primary-container text-on-primary-container rounded-lg font-bold transition-transform duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md text-body-md">Resources</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-body-md text-body-md">My Bookings</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-body-md text-body-md">Resource Management</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-body-md text-body-md">Booking Management</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+</div>
+<div class="flex flex-col gap-base pt-md border-t border-outline-variant">
+<a class="flex items-center gap-md px-sm py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-body-md text-body-md">Help</span>
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<!-- TopNavBar for Mobile (from JSON) -->
+<nav class="sticky top-0 z-50 flex justify-between items-center w-full px-lg py-sm bg-surface-container-lowest shadow-sm md:hidden">
+<h1 class="text-title-sm font-title-sm text-primary">CampusResource</h1>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 duration-200 hover:text-primary transition-colors">search</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 duration-200 hover:text-primary transition-colors">notifications</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjzfarJBciL1obgIDcu9lrzleBh1HHTyzJCCbrHAIUMcLa5tK3g7udz-cOdJSeDc1Wdj4_6THvE9xKExeyqKRYcAUUhPSHZsWRTiCxIi_0RXQYTEpB95nEKYQAkWhWVM_Xy3vS3SrQ2t9d-FHePBXkG55SjOX4nfQzZVy7iCUsndoRyqNw_EHKXxVifyk-8UW7NpqvhkzZDs9htxiVq5xXU9GITtsYrofvb6peCyhCaujxrESIWhOm32oeoTmn40yy7A_QzDaetPzC"/>
+</div>
+</div>
+</nav>
+<div class="max-w-[1440px] mx-auto p-md md:p-2xl md:px-2xl gap-gutter flex flex-col">
+<!-- Welcome Area -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-lg">
+<div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background mb-base">Welcome back, Alex</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Here is your campus resource overview for today.</p>
+</div>
+<div class="flex items-center gap-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Fall Semester 2023</span>
+</div>
+</header>
+<!-- Quick Stats -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-lg">
+<div class="bg-surface-container-lowest p-lg rounded-[1.5rem] level-1-shadow flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<span class="font-title-sm text-title-sm text-on-background">Upcoming Bookings</span>
+<div class="w-10 h-10 rounded-full soft-fill-confirmed flex items-center justify-center">
+<span class="material-symbols-outlined">event</span>
+</div>
+</div>
+<div class="text-display-lg font-display-lg text-primary">2</div>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-[1.5rem] level-1-shadow flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<span class="font-title-sm text-title-sm text-on-background">Completed</span>
+<div class="w-10 h-10 rounded-full soft-fill-completed flex items-center justify-center">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+</div>
+<div class="text-display-lg font-display-lg text-tertiary">12</div>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-[1.5rem] level-1-shadow flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<span class="font-title-sm text-title-sm text-on-background">Cancelled</span>
+<div class="w-10 h-10 rounded-full soft-fill-cancelled flex items-center justify-center">
+<span class="material-symbols-outlined">cancel</span>
+</div>
+</div>
+<div class="text-display-lg font-display-lg text-error">1</div>
+</div>
+</section>
+<!-- Search & Filter Area -->
+<section class="bg-surface-container-lowest p-lg rounded-[1.5rem] level-1-shadow mb-lg flex flex-col md:flex-row gap-md items-center">
+<div class="relative flex-1 w-full">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-xl pr-sm py-sm rounded-lg border border-outline-variant focus:border-secondary-container focus:ring-1 focus:ring-secondary-container focus:outline-none font-body-md text-body-md bg-surface-container-lowest text-on-background" placeholder="Search resources..." type="text"/>
+</div>
+<div class="flex gap-sm w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+<select class="px-md py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-background font-body-sm text-body-sm focus:border-secondary-container focus:outline-none min-w-[120px]">
+<option>Resource Type</option>
+<option>Study Room</option>
+<option>Computer Lab</option>
+<option>Equipment</option>
+</select>
+<select class="px-md py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-background font-body-sm text-body-sm focus:border-secondary-container focus:outline-none min-w-[120px]">
+<option>Capacity</option>
+<option>1-4 People</option>
+<option>5-10 People</option>
+<option>10+ People</option>
+</select>
+<select class="px-md py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-background font-body-sm text-body-sm focus:border-secondary-container focus:outline-none min-w-[120px]">
+<option>Location</option>
+<option>Library</option>
+<option>CS Building</option>
+<option>Student Union</option>
+</select>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Resource Cards Grid -->
+<section class="lg:col-span-2 flex flex-col gap-md">
+<div class="flex justify-between items-center mb-sm">
+<h3 class="font-title-sm text-title-sm text-on-background">Available Resources</h3>
+<a class="font-body-sm text-body-sm text-primary hover:underline" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] level-1-shadow overflow-hidden flex flex-col">
+<div class="h-32 bg-surface-container-low relative">
+<!-- Placeholder for image -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary-fixed to-secondary-fixed opacity-50"></div>
+<div class="absolute top-sm right-sm px-xs py-1 bg-surface-container-lowest rounded-full font-label-caps text-label-caps text-primary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span> Available
+                                </div>
+</div>
+<div class="p-lg flex flex-col flex-1">
+<h4 class="font-title-sm text-title-sm text-on-background mb-xs">Study Room A</h4>
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm mb-md">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Library Level 2</span>
+</div>
+<div class="flex flex-wrap gap-xs mb-lg">
+<span class="bg-surface-container-low px-sm py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">group</span> Cap: 4
+                                    </span>
+<span class="bg-surface-container-low px-sm py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant">Whiteboard</span>
+</div>
+<div class="mt-auto">
+<button class="w-full bg-primary-container text-on-primary-container rounded-lg py-sm font-title-sm text-title-sm hover:bg-primary hover:text-on-primary transition-colors">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] level-1-shadow overflow-hidden flex flex-col">
+<div class="h-32 bg-surface-container-low relative">
+<div class="absolute inset-0 bg-gradient-to-br from-tertiary-fixed to-secondary-fixed opacity-50"></div>
+<div class="absolute top-sm right-sm px-xs py-1 bg-surface-container-lowest rounded-full font-label-caps text-label-caps text-primary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span> Available
+                                </div>
+</div>
+<div class="p-lg flex flex-col flex-1">
+<h4 class="font-title-sm text-title-sm text-on-background mb-xs">Study Room B</h4>
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm mb-md">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Library Level 2</span>
+</div>
+<div class="flex flex-wrap gap-xs mb-lg">
+<span class="bg-surface-container-low px-sm py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">group</span> Cap: 6
+                                    </span>
+<span class="bg-surface-container-low px-sm py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant">Screen</span>
+</div>
+<div class="mt-auto">
+<button class="w-full border border-primary text-primary rounded-lg py-sm font-title-sm text-title-sm hover:bg-surface-container-low transition-colors">View Details</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] level-1-shadow overflow-hidden flex flex-col md:col-span-2">
+<div class="flex flex-col md:flex-row h-full">
+<div class="h-32 md:h-auto md:w-1/3 bg-surface-container-low relative">
+<div class="absolute inset-0 bg-gradient-to-br from-secondary-fixed to-primary-fixed opacity-50"></div>
+<div class="absolute top-sm right-sm px-xs py-1 bg-surface-container-lowest rounded-full font-label-caps text-label-caps text-primary flex items-center gap-1 md:hidden">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span> Available
+                                    </div>
+</div>
+<div class="p-lg flex flex-col flex-1">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-title-sm text-title-sm text-on-background">Computer Lab 1</h4>
+<div class="hidden md:flex px-xs py-1 bg-surface-container-low rounded-full font-label-caps text-label-caps text-primary items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-container"></span> Available
+                                        </div>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm mb-md">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>CS Building, Ground Floor</span>
+</div>
+<div class="flex flex-wrap gap-xs mb-lg">
+<span class="bg-surface-container-low px-sm py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">group</span> Cap: 30
+                                        </span>
+<span class="bg-surface-container-low px-sm py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant">Mac &amp; PC</span>
+<span class="bg-surface-container-low px-sm py-1 rounded-full font-body-sm text-body-sm text-on-surface-variant">Projector</span>
+</div>
+<div class="mt-auto flex justify-end">
+<button class="bg-primary-container text-on-primary-container rounded-lg py-sm px-lg font-title-sm text-title-sm hover:bg-primary hover:text-on-primary transition-colors">Book Lab</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Bookings Sidebar -->
+<aside class="flex flex-col gap-md">
+<h3 class="font-title-sm text-title-sm text-on-background mb-sm">Your Next Bookings</h3>
+<div class="bg-surface-container-lowest p-md rounded-[1.5rem] level-1-shadow flex flex-col gap-sm border-l-4 border-primary">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-title-sm text-title-sm text-on-background">Study Room C</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Library Level 3</p>
+</div>
+<span class="soft-fill-confirmed px-xs py-1 rounded font-label-caps text-label-caps">Confirmed</span>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant font-body-sm text-body-sm mt-2">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span>Today, 2:00 PM - 4:00 PM</span>
+</div>
+<div class="flex gap-sm mt-2">
+<button class="flex-1 bg-surface-container-low text-on-surface py-1 rounded-lg font-body-sm text-body-sm hover:bg-surface-container-high transition-colors">Modify</button>
+<button class="flex-1 border border-error text-error py-1 rounded-lg font-body-sm text-body-sm hover:bg-error-container transition-colors">Cancel</button>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-[1.5rem] level-1-shadow flex flex-col gap-sm border-l-4 border-outline-variant opacity-75">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-title-sm text-title-sm text-on-background">Projector Cart</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">IT Helpdesk</p>
+</div>
+<span class="soft-fill-confirmed px-xs py-1 rounded font-label-caps text-label-caps">Confirmed</span>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant font-body-sm text-body-sm mt-2">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span>Tomorrow, 9:00 AM - 11:00 AM</span>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

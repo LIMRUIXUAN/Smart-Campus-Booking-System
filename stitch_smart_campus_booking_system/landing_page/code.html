@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Campus Booking System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#00687a",
+                        "background": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444651",
+                        "on-background": "#191c1e",
+                        "inverse-on-surface": "#eff1f3",
+                        "inverse-primary": "#b6c4ff",
+                        "outline": "#757682",
+                        "secondary-fixed": "#acedff",
+                        "on-primary-container": "#90a8ff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "primary-fixed": "#dce1ff",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#004a31",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary": "#00311f",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-tertiary-container": "#27c38a",
+                        "on-secondary-container": "#006172",
+                        "on-primary-fixed": "#00164e",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#00236f",
+                        "secondary-container": "#57dffe",
+                        "surface-tint": "#4059aa",
+                        "primary-container": "#1e3a8a",
+                        "on-primary-fixed-variant": "#264191",
+                        "inverse-surface": "#2d3133",
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c5c5d3",
+                        "surface": "#f7f9fb",
+                        "on-secondary-fixed": "#001f26",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sm": "12px",
+                        "container-max": "1440px",
+                        "2xl": "48px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "xs": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar (Shared Component) - Suppressed for Landing Page intent (linear/marketing) as per rules, using a simplified marketing header instead -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-lg py-sm bg-surface-container-lowest/90 backdrop-blur-md shadow-sm border-b border-surface-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-2xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+<span class="font-title-sm text-primary">Smart Campus Booking System</span>
+</div>
+<nav class="hidden md:flex gap-lg items-center">
+<a class="font-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#features">Features</a>
+<a class="font-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#how-it-works">How it Works</a>
+<button class="bg-primary text-on-primary font-title-sm px-lg py-sm rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+                Book a Resource
+            </button>
+</nav>
+</header>
+<main class="max-w-[1440px] mx-auto w-full">
+<!-- Hero Section -->
+<section class="relative pt-24 pb-32 px-md md:px-2xl lg:px-2xl overflow-hidden flex flex-col md:flex-row items-center gap-xl md:gap-2xl min-h-[819px]">
+<div class="absolute inset-0 bg-gradient-to-br from-surface-container-low to-background -z-10"></div>
+<div class="flex-1 max-w-2xl z-10 space-y-lg">
+<h1 class="font-display-lg-mobile md:font-display-lg text-on-background leading-tight">
+                    Book campus spaces without the <span class="text-primary">back-and-forth</span>
+</h1>
+<p class="font-body-md text-on-surface-variant text-lg max-w-xl leading-relaxed">
+                    Smart Campus Booking helps students reserve study rooms, labs, and shared resources with real-time availability and conflict prevention.
+                </p>
+<div class="flex flex-col sm:flex-row gap-sm pt-sm">
+<button class="bg-primary text-on-primary font-title-sm px-xl py-sm rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md flex items-center justify-center gap-xs h-12">
+                        Book a Resource
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<button class="bg-surface-container-lowest text-primary border border-outline-variant font-title-sm px-xl py-sm rounded-lg hover:bg-surface-container-low transition-colors shadow-sm flex items-center justify-center gap-xs h-12">
+                        View Demo
+                        <span class="material-symbols-outlined text-sm">play_circle</span>
+</button>
+</div>
+<div class="flex items-center gap-sm pt-lg text-on-surface-variant">
+<div class="flex -space-x-3">
+<img alt="User" class="w-10 h-10 rounded-full border-2 border-surface-container-lowest" data-alt="A small circular profile picture of a diverse university student smiling warmly. Soft studio lighting. Modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXWhXmpYQTgGK07hgUmwazmG_Wt1bF1l9NJQYNe8PmdvdPiHvX9lNq-I3cT5Kwzo7jsHBJksPFC31RsdYeFMhj86wVMJpVugf415YlRak4x8csWxTO34OF1ZYO7rH6uYNoLp0djxSRQdr_6cYLTGaGu_e-ZmmA6BpxoyC2gHwdZnwD1jY3supN6phzpzvk_m0kxySoG0mnE4HUmTPylG7KrEgw74xaBLyN5WeOKhso-boSgoMAWH7UQSKnk5dpGsWEO6ZvK_-cP8jX"/>
+<img alt="User" class="w-10 h-10 rounded-full border-2 border-surface-container-lowest" data-alt="A small circular profile picture of a young professional faculty member. Neutral background. High key lighting. Modern academic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWhoJF2C8lwjVTsZj0I5HZINjFpE3T-2izlaoQLPHAb0qWsijRCD_cfrvnoOdZX8YX7IT0hC4VJJRTpfbfpHbWEKt5K9rX1hbmVUY5zwXvxcf3ck-QaW0e5BbkG_u6GAgX3z3ylwp5Gp4hQYUtNz-axeh1eQuYLFoE5jFCXpZ62uY0blY9Rkk5piXk9PQp5OyTdBYLmFaZYf4f1R4P0JmTeA2bkcwG15CFRQjBf88vA9I1Qkmd5-z5zQ-7xkeZmIQxy6CWuMQcysVV"/>
+<img alt="User" class="w-10 h-10 rounded-full border-2 border-surface-container-lowest" data-alt="A small circular profile picture of an Asian student looking focused. Bright ambient light. Clean minimalist framing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHxckbDE_1gcSP8N_bEVEXgBNaKJBLRZszFZQj6wYBvL0ox9rS0Laiw1JBaaNw_8COUMB2aCUB5jSJfpEQYTEsOthbtvCBwzi75z4esflOXGkhJpVyy19Pemaj-SunLzb1aoXMMqMuRqapmuLtBfvfnyXc6Ep_42LXo0u7nUZM-rCe-W7ie9ZoIbiVNH9RBgx255TGswbJUhtrJ-sUoZbwkPnPJuNjbl0Mey2ds9uR6zEfCpZw6MAa5esTgIkkAzaMDE68akTKG2Uu"/>
+</div>
+<span class="font-body-sm">Trusted by 10,000+ students &amp; faculty</span>
+</div>
+</div>
+<!-- Hero Mockup Preview -->
+<div class="flex-1 w-full relative z-10 mt-xl md:mt-0 perspective-1000">
+<div class="relative bg-surface-container-lowest rounded-xl shadow-[0_4px_40px_rgba(30,58,138,0.08)] border border-surface-variant p-md md:p-lg transform md:-rotate-y-12 md:rotate-x-6 transition-transform duration-500 hover:rotate-0">
+<!-- Mockup Header -->
+<div class="flex justify-between items-center mb-lg border-b border-surface-variant pb-sm">
+<div class="font-headline-md text-primary">Resource Dashboard</div>
+<div class="flex gap-xs">
+<span class="material-symbols-outlined text-on-surface-variant bg-surface-container-low p-xs rounded-full">search</span>
+<span class="material-symbols-outlined text-on-surface-variant bg-surface-container-low p-xs rounded-full">notifications</span>
+</div>
+</div>
+<!-- Mockup Content Bento Grid -->
+<div class="grid grid-cols-2 gap-sm">
+<!-- Active Booking -->
+<div class="col-span-2 bg-surface-container-low p-sm rounded-lg flex justify-between items-center border border-outline-variant/30">
+<div>
+<div class="font-label-caps text-on-surface-variant mb-base">Current Booking</div>
+<div class="font-title-sm text-on-background">Study Room A (Library)</div>
+<div class="font-body-sm text-primary flex items-center gap-xs mt-base">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 10:00 AM - 12:00 PM
+                                </div>
+</div>
+<div class="bg-primary/10 text-primary font-label-caps px-sm py-xs rounded-full border border-primary/20">Active</div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 p-sm rounded-lg shadow-sm">
+<div class="w-10 h-10 bg-secondary-container text-on-secondary-container rounded-lg flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add_box</span>
+</div>
+<div class="font-title-sm">New Booking</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant/30 p-sm rounded-lg shadow-sm">
+<div class="w-10 h-10 bg-tertiary-container text-on-tertiary-container rounded-lg flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+<div class="font-title-sm">My Schedule</div>
+</div>
+</div>
+</div>
+<!-- Decorative Blur -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary-container/20 blur-3xl -z-10 rounded-full"></div>
+</div>
+</section>
+<!-- Features Section (Bento Grid Style) -->
+<section class="py-24 px-md md:px-2xl bg-surface-container-lowest border-y border-surface-variant" id="features">
+<div class="text-center mb-16 max-w-2xl mx-auto">
+<h2 class="font-display-lg-mobile md:font-display-lg text-on-background mb-sm">Intelligent Campus Management</h2>
+<p class="font-body-md text-on-surface-variant">Designed for the modern academic environment, our system minimizes friction and maximizes resource utilization.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg max-w-6xl mx-auto auto-rows-min">
+<!-- Feature 1: Real-time (Span 2 cols on md) -->
+<div class="md:col-span-2 bg-background border border-outline-variant/50 rounded-xl p-lg relative overflow-hidden group hover:shadow-[0_4px_20px_rgba(30,58,138,0.05)] transition-all">
+<div class="absolute top-0 right-0 p-lg opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[120px] text-primary">bolt</span>
+</div>
+<div class="relative z-10 w-2/3">
+<div class="w-12 h-12 bg-primary-container text-on-primary-container rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">sync</span>
+</div>
+<h3 class="font-headline-md text-on-background mb-xs">Real-time Availability</h3>
+<p class="font-body-md text-on-surface-variant">Instantly see what rooms and equipment are free right now. Our live map updates in milliseconds, preventing double-bookings.</p>
+</div>
+</div>
+<!-- Feature 2: Conflict-free -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-lg flex flex-col justify-between hover:shadow-[0_4px_20px_rgba(30,58,138,0.05)] transition-all">
+<div>
+<div class="w-12 h-12 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">shield_lock</span>
+</div>
+<h3 class="font-headline-md text-on-background mb-xs">Conflict-Free</h3>
+<p class="font-body-md text-on-surface-variant">Automated schedule conflict resolution ensures you only see viable slots.</p>
+</div>
+</div>
+<!-- Feature 3: Smart Suggestions -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-lg flex flex-col justify-between hover:shadow-[0_4px_20px_rgba(30,58,138,0.05)] transition-all">
+<div>
+<div class="w-12 h-12 bg-tertiary-container text-on-tertiary-container rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<h3 class="font-headline-md text-on-background mb-xs">Smart Suggestions</h3>
+<p class="font-body-md text-on-surface-variant">AI-driven recommendations based on your group size and required amenities.</p>
+</div>
+</div>
+<!-- Feature 4: Analytics (Span 2 cols on md) -->
+<div class="md:col-span-2 bg-background border border-outline-variant/50 rounded-xl p-lg relative overflow-hidden group hover:shadow-[0_4px_20px_rgba(30,58,138,0.05)] transition-all flex flex-col md:flex-row items-center gap-lg">
+<div class="flex-1 z-10">
+<div class="w-12 h-12 bg-surface-tint/10 text-surface-tint rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<h3 class="font-headline-md text-on-background mb-xs">Usage Analytics</h3>
+<p class="font-body-md text-on-surface-variant">Administrators get deep insights into peak hours, underutilized spaces, and resource health to optimize campus layout.</p>
+</div>
+<!-- Mini Chart graphic -->
+<div class="flex-1 w-full bg-surface-container-lowest p-sm rounded-lg border border-outline-variant/30 flex items-end gap-xs h-32">
+<div class="w-1/5 bg-primary/20 h-[40%] rounded-t-sm"></div>
+<div class="w-1/5 bg-primary/40 h-[60%] rounded-t-sm"></div>
+<div class="w-1/5 bg-primary/80 h-[90%] rounded-t-sm"></div>
+<div class="w-1/5 bg-primary/60 h-[70%] rounded-t-sm"></div>
+<div class="w-1/5 bg-primary/30 h-[50%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-inverse-surface text-inverse-on-surface py-xl px-md md:px-2xl">
+<div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-lg">
+<div class="col-span-1 md:col-span-2">
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-inverse-primary" data-weight="fill">account_balance</span>
+<span class="font-title-sm text-inverse-primary">Smart Campus Booking System</span>
+</div>
+<p class="font-body-sm text-surface-dim max-w-sm">Empowering students and faculty with seamless resource management and intelligent scheduling technology.</p>
+</div>
+<div>
+<h4 class="font-label-caps text-outline mb-md">Platform</h4>
+<ul class="space-y-sm font-body-sm text-surface-dim">
+<li><a class="hover:text-inverse-primary transition-colors" href="#">Dashboard</a></li>
+<li><a class="hover:text-inverse-primary transition-colors" href="#">Room Directory</a></li>
+<li><a class="hover:text-inverse-primary transition-colors" href="#">Equipment Lending</a></li>
+<li><a class="hover:text-inverse-primary transition-colors" href="#">Mobile App</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-outline mb-md">Support</h4>
+<ul class="space-y-sm font-body-sm text-surface-dim">
+<li><a class="hover:text-inverse-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-inverse-primary transition-colors" href="#">IT Desk</a></li>
+<li><a class="hover:text-inverse-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-inverse-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-[1440px] mx-auto mt-xl pt-lg border-t border-outline/30 flex justify-between items-center">
+<p class="font-body-sm text-surface-dim">© 2024 Smart Campus Booking System. All rights reserved.</p>
+</div>
+</footer>
+</body></html>

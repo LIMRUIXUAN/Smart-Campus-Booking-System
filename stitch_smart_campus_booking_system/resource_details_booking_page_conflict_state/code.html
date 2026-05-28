@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ResourceHub - Book Study Room A</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#00687a",
+                        "background": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444651",
+                        "on-background": "#191c1e",
+                        "inverse-on-surface": "#eff1f3",
+                        "inverse-primary": "#b6c4ff",
+                        "outline": "#757682",
+                        "secondary-fixed": "#acedff",
+                        "on-primary-container": "#90a8ff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "primary-fixed": "#dce1ff",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#004a31",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary": "#00311f",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-tertiary-container": "#27c38a",
+                        "on-secondary-container": "#006172",
+                        "on-primary-fixed": "#00164e",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#00236f",
+                        "secondary-container": "#57dffe",
+                        "surface-tint": "#4059aa",
+                        "primary-container": "#1e3a8a",
+                        "on-primary-fixed-variant": "#264191",
+                        "inverse-surface": "#2d3133",
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c5c5d3",
+                        "surface": "#f7f9fb",
+                        "on-secondary-fixed": "#001f26",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sm": "12px",
+                        "container-max": "1440px",
+                        "2xl": "48px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "xs": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    },
+                    "boxShadow": {
+                        "ambient": "0px 4px 20px rgba(30, 58, 138, 0.05)",
+                        "popover": "0px 10px 30px rgba(30, 58, 138, 0.1)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        /* Smooth transitions */
+        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0px 8px 24px rgba(30, 58, 138, 0.08); }
+    </style>
+</head>
+<body class="text-on-background min-h-screen flex flex-col md:flex-row">
+<!-- TopNavBar (Mobile Only for Destination, but this is a transactional page so we SUPPRESS IT per guidelines) -->
+<!-- SideNavBar (Desktop Only for Destination, but this is a transactional page so we SUPPRESS IT per guidelines) -->
+<!-- The user is in a focused booking task. Navigation is suppressed. -->
+<main class="flex-1 max-w-container-max mx-auto w-full p-md md:p-2xl">
+<!-- Header / Back Action -->
+<div class="flex items-center mb-lg">
+<button class="flex items-center text-primary hover:text-primary-container transition-colors font-title-sm text-title-sm mr-md group">
+<span class="material-symbols-outlined mr-xs group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                Back to Resources
+            </button>
+<div class="ml-auto flex items-center text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] mr-xs">library_books</span>
+                Library Level 2
+            </div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Resource Details & Booking Form -->
+<div class="lg:col-span-7 flex flex-col gap-lg">
+<!-- Resource Details Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-lg shadow-ambient">
+<div class="flex flex-col md:flex-row gap-lg">
+<div class="w-full md:w-1/3 h-48 rounded-lg overflow-hidden bg-surface-container-low flex-shrink-0 relative">
+<img alt="Study Room A" class="w-full h-full object-cover" data-alt="A brightly lit, modern academic study room with a sleek white table, four ergonomic black chairs, and a large window overlooking a campus quad. The lighting is natural and airy, reinforcing a clean, productive light-mode aesthetic with subtle indigo accents on the wall art." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTauRbPo2SrD46sEpiZ7-CO9bdQNFEmG48KSBO7V9W8Ogpe1EabSQ56Ptr6uz8P1XWeFUgBy7n6qrCxbzGbn2_pPzMVyZc4tFpgmyoZxfQhwc7RicUjzrgbHHdwBwhqrIAPECmWzaT-ZCuXaNH8wy9muoTcXxLTaVpmNpiegSH7n4eaLOcEPl_7mxy7WWgRF7YD9qhnLJ1Hs4Tjw--TF4iK5aOsVnbDaWeHttjE3Lp9GWkJmN0mlb2G9Grno0hfAfnEmyM2VYrO83S"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/90 backdrop-blur-sm px-xs py-[2px] rounded-full flex items-center shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container mr-[4px]">group</span>
+<span class="font-label-caps text-label-caps text-on-surface">Cap: 4</span>
+</div>
+</div>
+<div class="flex flex-col flex-1">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background mb-xs">Study Room A</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Quiet, enclosed study space perfect for small group collaborations or focused individual work. Includes a whiteboard and standard power outlets.</p>
+<div class="flex flex-wrap gap-xs mt-auto">
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-sm py-[4px] rounded-full flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-[4px]">wifi</span> Wi-Fi
+                                </span>
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-sm py-[4px] rounded-full flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-[4px]">electrical_services</span> Power
+                                </span>
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-sm py-[4px] rounded-full flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-[4px]">edit_square</span> Whiteboard
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Booking Form Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-lg shadow-ambient relative border-2 border-error/20 overflow-hidden">
+<!-- Subtle error gradient background pulse -->
+<div class="absolute inset-0 bg-gradient-to-br from-error-container/30 to-transparent pointer-events-none"></div>
+<div class="relative z-10">
+<h2 class="font-headline-md text-headline-md text-on-background mb-lg flex items-center">
+<span class="material-symbols-outlined mr-sm text-primary">edit_calendar</span>
+                            Reservation Details
+                        </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md mb-lg">
+<!-- Date Picker -->
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Date</label>
+<div class="relative">
+<span class="absolute left-sm top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">calendar_today</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-sm pl-xl pr-sm font-body-md text-body-md text-on-background focus:border-secondary-fixed-dim focus:ring-1 focus:ring-secondary-fixed-dim outline-none transition-all" type="date" value="2023-10-24"/>
+</div>
+</div>
+<!-- Spacing for layout -->
+<div class="hidden md:block"></div>
+<!-- Start Time -->
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Start Time</label>
+<div class="relative">
+<span class="absolute left-sm top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">schedule</span>
+<select class="w-full bg-surface-container-lowest border border-error rounded-lg py-sm pl-xl pr-sm font-body-md text-body-md text-on-background focus:border-error focus:ring-1 focus:ring-error outline-none transition-all appearance-none cursor-pointer">
+<option>1:00 PM</option>
+<option selected="">2:00 PM</option>
+<option>3:00 PM</option>
+</select>
+<span class="absolute right-sm top-1/2 -translate-y-1/2 material-symbols-outlined text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- End Time -->
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">End Time</label>
+<div class="relative">
+<span class="absolute left-sm top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">schedule</span>
+<select class="w-full bg-surface-container-lowest border border-error rounded-lg py-sm pl-xl pr-sm font-body-md text-body-md text-on-background focus:border-error focus:ring-1 focus:ring-error outline-none transition-all appearance-none cursor-pointer">
+<option>2:00 PM</option>
+<option selected="">3:00 PM</option>
+<option>4:00 PM</option>
+</select>
+<span class="absolute right-sm top-1/2 -translate-y-1/2 material-symbols-outlined text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Conflict Detection Warning -->
+<div class="bg-error-container rounded-lg p-md flex items-start mt-lg border border-error/30 animate-pulse">
+<span class="material-symbols-outlined text-on-error-container mr-sm icon-fill">error</span>
+<div>
+<h3 class="font-title-sm text-title-sm text-on-error-container mb-[2px]">Conflict Detected</h3>
+<p class="font-body-md text-body-md text-on-error-container/80">This resource is already booked for the selected time. Please choose another time or review the smart suggestions below.</p>
+</div>
+</div>
+<div class="mt-lg flex justify-end">
+<button class="bg-surface-variant text-outline font-title-sm text-title-sm px-xl py-sm rounded-lg cursor-not-allowed flex items-center opacity-50" disabled="">
+                                Confirm Booking
+                                <span class="material-symbols-outlined ml-xs">lock</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Smart Suggestions -->
+<div class="lg:col-span-5 flex flex-col">
+<div class="bg-surface-container-lowest rounded-2xl p-lg shadow-ambient h-full">
+<div class="flex items-center mb-lg">
+<span class="material-symbols-outlined text-secondary mr-sm icon-fill">lightbulb</span>
+<h2 class="font-headline-md text-headline-md text-on-background">Smart Suggestions</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">We found some available alternatives that might work for you.</p>
+<div class="flex flex-col gap-md">
+<!-- Suggestion 1: Same room, nearby time -->
+<div class="border border-outline-variant rounded-xl p-md card-hover bg-surface-bright flex flex-col justify-between items-start gap-md">
+<div class="flex items-start w-full justify-between">
+<div>
+<div class="bg-secondary-fixed/30 text-on-secondary-fixed-variant font-label-caps text-label-caps px-sm py-[2px] rounded-full inline-block mb-xs">Same Room</div>
+<h4 class="font-title-sm text-title-sm text-on-background">Study Room A</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center mt-xs">
+<span class="material-symbols-outlined text-[16px] mr-[4px]">schedule</span>
+                                        3:00 PM - 4:00 PM
+                                    </p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant text-primary font-body-sm text-body-sm px-sm py-[4px] rounded-md shadow-sm">
+                                    +1 hr later
+                                </div>
+</div>
+<button class="w-full border border-primary text-primary hover:bg-primary-container/10 font-title-sm text-title-sm py-sm rounded-lg transition-colors flex justify-center items-center">
+                                Use this slot
+                                <span class="material-symbols-outlined ml-xs text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Suggestion 2: Similar room, same time -->
+<div class="border border-outline-variant rounded-xl p-md card-hover bg-surface-bright flex flex-col justify-between items-start gap-md">
+<div class="flex items-start w-full justify-between">
+<div>
+<div class="bg-tertiary-fixed/30 text-on-tertiary-fixed-variant font-label-caps text-label-caps px-sm py-[2px] rounded-full inline-block mb-xs">Same Time</div>
+<h4 class="font-title-sm text-title-sm text-on-background">Study Room B</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center mt-xs">
+<span class="material-symbols-outlined text-[16px] mr-[4px]">location_on</span>
+                                        Library Level 2 (Next Door)
+                                    </p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant text-on-surface font-body-sm text-body-sm px-sm py-[4px] rounded-md shadow-sm flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-[2px]">group</span> 4
+                                </div>
+</div>
+<button class="w-full border border-primary text-primary hover:bg-primary-container/10 font-title-sm text-title-sm py-sm rounded-lg transition-colors flex justify-center items-center">
+                                Use this slot
+                                <span class="material-symbols-outlined ml-xs text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Suggestion 3: Similar room, nearby time -->
+<div class="border border-outline-variant rounded-xl p-md card-hover bg-surface-bright flex flex-col justify-between items-start gap-md opacity-80">
+<div class="flex items-start w-full justify-between">
+<div>
+<div class="bg-surface-variant text-on-surface-variant font-label-caps text-label-caps px-sm py-[2px] rounded-full inline-block mb-xs">Alternative Option</div>
+<h4 class="font-title-sm text-title-sm text-on-background">Discussion Room C</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center mt-xs">
+<span class="material-symbols-outlined text-[16px] mr-[4px]">schedule</span>
+                                        3:30 PM - 4:30 PM
+                                    </p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant text-on-surface font-body-sm text-body-sm px-sm py-[4px] rounded-md shadow-sm flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-[2px]">group</span> 6
+                                </div>
+</div>
+<button class="w-full border border-outline text-on-surface-variant hover:bg-surface-container font-title-sm text-title-sm py-sm rounded-lg transition-colors flex justify-center items-center">
+                                Use this slot
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
