@@ -166,6 +166,16 @@ export const api = {
     return data
   },
 
+  async getLandingRooms() {
+    const { data } = await client.get('/public/landing/rooms')
+    return data.map((room) => ({
+      ...room,
+      startTime: toTime(room.startTime),
+      endTime: toTime(room.endTime),
+      nextTransitionTime: toTime(room.nextTransitionTime),
+    }))
+  },
+
   async getResource(id) {
     const { data } = await client.get(`/resources/${id}`)
     return data

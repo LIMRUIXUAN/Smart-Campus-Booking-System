@@ -36,7 +36,7 @@ public class SecurityConfig {
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authenticationProvider(authenticationProvider)
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/public/**").permitAll()
         .requestMatchers("/api/auth/me/**").authenticated()
         .requestMatchers("/api/resources/**").authenticated()
         .requestMatchers("/api/bookings", "/api/bookings/my", "/api/bookings/*/cancel").hasAnyRole("STUDENT", "ADMIN")

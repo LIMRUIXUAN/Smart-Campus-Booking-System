@@ -12,6 +12,8 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
 
   List<Booking> findAllByOrderByStartDateTimeDesc();
 
+  List<Booking> findByStatusInOrderByStartDateTimeAsc(Collection<BookingStatus> statuses);
+
   List<Booking> findByResourceIdAndStatusInAndStartDateTimeLessThanAndEndDateTimeGreaterThan(
       String resourceId,
       Collection<BookingStatus> statuses,
