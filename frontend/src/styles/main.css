@@ -52,3 +52,75 @@
     @apply rounded-card border border-surface-variant/60 bg-surface-container-lowest p-6 shadow-ambient;
   }
 }
+
+@layer components {
+  .feature-stack {
+    @apply mx-auto flex max-w-5xl flex-col gap-5;
+  }
+
+  .feature-bar {
+    --shine-x: 50%;
+    --shine-y: 50%;
+    @apply relative flex min-h-36 cursor-pointer flex-col gap-5 overflow-hidden rounded-card border border-surface-variant/70 bg-surface-container-lowest p-6 shadow-ambient transition duration-300 ease-out sm:min-h-32 sm:flex-row sm:items-center sm:p-7;
+  }
+
+  .feature-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background:
+      radial-gradient(
+        220px circle at var(--shine-x) var(--shine-y),
+        rgba(33, 150, 243, 0.95),
+        rgba(33, 150, 243, 0.28) 38%,
+        transparent 72%
+      ),
+      linear-gradient(90deg, transparent, rgba(33, 150, 243, 0.34), transparent);
+    opacity: 0;
+    transition: opacity 220ms ease;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .feature-bar::after {
+    content: '';
+    position: absolute;
+    left: 1.5rem;
+    right: 1.5rem;
+    top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #1e88ff, #70c8ff, transparent);
+    filter: drop-shadow(0 0 10px rgba(30, 136, 255, 0.7));
+    opacity: 0;
+    transform: translateX(-18%);
+    transition: opacity 220ms ease, transform 360ms ease;
+    pointer-events: none;
+  }
+
+  .feature-bar:hover {
+    @apply -translate-y-1 border-primary/40 shadow-popover;
+  }
+
+  .feature-bar:hover::before,
+  .feature-bar:hover::after {
+    opacity: 1;
+  }
+
+  .feature-bar:hover::after {
+    transform: translateX(18%);
+  }
+
+  .feature-bar__icon {
+    @apply h-12 w-12 shrink-0 rounded-control p-3;
+  }
+
+  .feature-bar__content {
+    @apply relative z-10 max-w-3xl;
+  }
+}
