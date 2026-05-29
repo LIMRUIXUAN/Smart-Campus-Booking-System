@@ -1,6 +1,7 @@
 <script setup>
-import { ArrowRight, BarChart3, CheckCircle2, Lightbulb, ShieldCheck } from '@lucide/vue'
+import { BarChart3, CheckCircle2, Lightbulb, ShieldCheck } from '@lucide/vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import GetStartedButton from '@/components/ui/GetStartedButton.vue'
 import TextColorHero from '@/components/ui/TextColorHero.vue'
 
 const handleFeaturePointerMove = (event) => {
@@ -49,10 +50,7 @@ const handleFeaturePointerLeave = (event) => {
           </p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
             <RouterLink :to="{ name: 'login' }">
-              <BaseButton class="w-full sm:w-auto">
-                Book a Resource
-                <ArrowRight class="h-4 w-4" />
-              </BaseButton>
+              <GetStartedButton />
             </RouterLink>
             <RouterLink :to="{ name: 'register' }">
               <BaseButton variant="secondary" class="w-full sm:w-auto">Create Account</BaseButton>
