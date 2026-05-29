@@ -1,5 +1,5 @@
 <script setup>
-import { ArrowRight, BarChart3, CalendarCheck2, CheckCircle2, Lightbulb, ShieldCheck } from '@lucide/vue'
+import { ArrowRight, BarChart3, CheckCircle2, Lightbulb, ShieldCheck } from '@lucide/vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 
 const handleFeaturePointerMove = (event) => {
@@ -21,10 +21,8 @@ const handleFeaturePointerLeave = (event) => {
     <header class="sticky top-0 z-40 border-b border-surface-variant bg-surface-container-lowest/90 backdrop-blur">
       <div class="mx-auto flex max-w-container items-center justify-between px-4 py-3 md:px-8">
         <RouterLink to="/" class="flex items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-control bg-primary-container text-on-primary-container">
-            <CalendarCheck2 class="h-5 w-5" />
-          </div>
-          <span class="font-semibold text-primary">Smart Campus Booking System</span>
+          <img src="/logo/logo_normal.png" alt="RooMio logo" class="h-10 w-10 rounded-control object-contain" />
+          <span class="font-semibold text-primary">RooMio</span>
         </RouterLink>
         <nav class="hidden items-center gap-6 text-sm font-medium text-on-surface-variant md:flex">
           <a href="#features" class="hover:text-primary">Features</a>
@@ -43,7 +41,7 @@ const handleFeaturePointerLeave = (event) => {
     <main>
       <section class="mx-auto grid min-h-[calc(100vh-68px)] max-w-container items-center gap-10 px-4 py-14 md:grid-cols-[1fr_0.95fr] md:px-8">
         <div>
-          <p class="label-caps mb-4">CampusResource</p>
+          <p class="label-caps mb-4">RooMio</p>
           <h1 class="page-title max-w-2xl">
             Book campus spaces without the <span class="text-primary">back-and-forth</span>.
           </h1>
@@ -185,7 +183,7 @@ const handleFeaturePointerLeave = (event) => {
 
     <footer class="bg-inverse-surface px-4 py-8 text-inverse-on-surface md:px-8">
       <div class="mx-auto flex max-w-container flex-col justify-between gap-4 md:flex-row md:items-center">
-        <p class="font-semibold text-inverse-primary">Smart Campus Booking System</p>
+        <p class="font-semibold text-inverse-primary">RooMio</p>
         <p class="text-sm text-surface-container-highest">Demo-ready Vue 3 frontend for campus resource bookings.</p>
       </div>
     </footer>
