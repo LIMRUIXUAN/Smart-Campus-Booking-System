@@ -4,6 +4,7 @@ import LandingView from '@/views/LandingView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import StudentDashboardView from '@/views/student/StudentDashboardView.vue'
+import StudentResourcesView from '@/views/student/StudentResourcesView.vue'
 import ResourceDetailsView from '@/views/student/ResourceDetailsView.vue'
 import MyBookingsView from '@/views/student/MyBookingsView.vue'
 import AdminDashboardView from '@/views/admin/AdminDashboardView.vue'
@@ -18,6 +19,12 @@ const routes = [
     path: '/student',
     name: 'student-dashboard',
     component: StudentDashboardView,
+    meta: { requiresAuth: true, role: 'student' },
+  },
+  {
+    path: '/student/resources',
+    name: 'student-resources',
+    component: StudentResourcesView,
     meta: { requiresAuth: true, role: 'student' },
   },
   {

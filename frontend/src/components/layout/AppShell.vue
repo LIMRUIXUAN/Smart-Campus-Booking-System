@@ -41,7 +41,7 @@ const navItems = computed(() =>
       ]
     : [
         { label: 'Dashboard', route: 'student-dashboard', icon: Home },
-        { label: 'Resources', route: 'student-dashboard', icon: LibraryBig },
+        { label: 'Resources', route: 'student-resources', icon: LibraryBig },
         { label: 'My Bookings', route: 'my-bookings', icon: BookOpenCheck },
       ],
 )
@@ -79,7 +79,7 @@ const logout = () => {
           class="flex items-center gap-3 rounded-control px-3 py-3 text-sm font-semibold transition"
           :class="
             route.name === item.route
-              ? 'bg-primary-container text-on-primary-container'
+              ? 'bg-primary text-white'
               : 'text-on-surface-variant hover:bg-surface-container-high'
           "
         >
