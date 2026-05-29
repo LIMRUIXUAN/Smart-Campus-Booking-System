@@ -52,8 +52,11 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     User student = users.save(new User("u-student", "Alya Tan", "student@campus.test", passwordEncoder.encode("password"), Role.STUDENT));
-    users.save(new User("u-admin", "Mr. Kumar", "admin@campus.test", passwordEncoder.encode("password"), Role.ADMIN));
+    student.setEmailVerified(true);
+    User admin = users.save(new User("u-admin", "Mr. Kumar", "admin@campus.test", passwordEncoder.encode("password"), Role.ADMIN));
+    admin.setEmailVerified(true);
     User other = users.save(new User("u-other", "Nadia Lee", "nadia@campus.test", passwordEncoder.encode("password"), Role.STUDENT));
+    other.setEmailVerified(true);
 
     Resource studyA = resources.save(new Resource("r-study-a", "Study Room A", ResourceType.ROOM, "Main Library, Floor 2", 4,
       ResourceStatus.ACTIVE, "Quiet enclosed space for small group work with a whiteboard and power outlets.",

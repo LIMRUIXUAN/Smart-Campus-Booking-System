@@ -29,6 +29,29 @@ public class User {
   private Role role;
 
   @Column(nullable = false)
+  private boolean emailVerified;
+
+  private String pendingEmailVerificationCode;
+
+  private Instant pendingEmailVerificationExpiresAt;
+
+  @Column(nullable = false)
+  private boolean twoFactorEnabled;
+
+  private String pendingTwoFactorCode;
+
+  private Instant pendingTwoFactorExpiresAt;
+
+  @Column(nullable = false)
+  private boolean bookingAlertsEnabled;
+
+  @Column(nullable = false)
+  private boolean emailDigestEnabled;
+
+  @Column(nullable = false)
+  private boolean pushNotificationsEnabled;
+
+  @Column(nullable = false)
   private Instant createdAt;
 
   protected User() {
@@ -40,6 +63,11 @@ public class User {
     this.email = email;
     this.passwordHash = passwordHash;
     this.role = role;
+    this.emailVerified = false;
+    this.twoFactorEnabled = false;
+    this.bookingAlertsEnabled = true;
+    this.emailDigestEnabled = true;
+    this.pushNotificationsEnabled = true;
     this.createdAt = Instant.now();
   }
 
@@ -77,6 +105,78 @@ public class User {
 
   public void setRole(Role role) {
     this.role = role;
+  }
+
+  public boolean isEmailVerified() {
+    return emailVerified;
+  }
+
+  public void setEmailVerified(boolean emailVerified) {
+    this.emailVerified = emailVerified;
+  }
+
+  public String getPendingEmailVerificationCode() {
+    return pendingEmailVerificationCode;
+  }
+
+  public void setPendingEmailVerificationCode(String pendingEmailVerificationCode) {
+    this.pendingEmailVerificationCode = pendingEmailVerificationCode;
+  }
+
+  public Instant getPendingEmailVerificationExpiresAt() {
+    return pendingEmailVerificationExpiresAt;
+  }
+
+  public void setPendingEmailVerificationExpiresAt(Instant pendingEmailVerificationExpiresAt) {
+    this.pendingEmailVerificationExpiresAt = pendingEmailVerificationExpiresAt;
+  }
+
+  public boolean isTwoFactorEnabled() {
+    return twoFactorEnabled;
+  }
+
+  public void setTwoFactorEnabled(boolean twoFactorEnabled) {
+    this.twoFactorEnabled = twoFactorEnabled;
+  }
+
+  public String getPendingTwoFactorCode() {
+    return pendingTwoFactorCode;
+  }
+
+  public void setPendingTwoFactorCode(String pendingTwoFactorCode) {
+    this.pendingTwoFactorCode = pendingTwoFactorCode;
+  }
+
+  public Instant getPendingTwoFactorExpiresAt() {
+    return pendingTwoFactorExpiresAt;
+  }
+
+  public void setPendingTwoFactorExpiresAt(Instant pendingTwoFactorExpiresAt) {
+    this.pendingTwoFactorExpiresAt = pendingTwoFactorExpiresAt;
+  }
+
+  public boolean isBookingAlertsEnabled() {
+    return bookingAlertsEnabled;
+  }
+
+  public void setBookingAlertsEnabled(boolean bookingAlertsEnabled) {
+    this.bookingAlertsEnabled = bookingAlertsEnabled;
+  }
+
+  public boolean isEmailDigestEnabled() {
+    return emailDigestEnabled;
+  }
+
+  public void setEmailDigestEnabled(boolean emailDigestEnabled) {
+    this.emailDigestEnabled = emailDigestEnabled;
+  }
+
+  public boolean isPushNotificationsEnabled() {
+    return pushNotificationsEnabled;
+  }
+
+  public void setPushNotificationsEnabled(boolean pushNotificationsEnabled) {
+    this.pushNotificationsEnabled = pushNotificationsEnabled;
   }
 
   public Instant getCreatedAt() {

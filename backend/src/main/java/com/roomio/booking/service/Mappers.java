@@ -12,7 +12,16 @@ public final class Mappers {
   }
 
   public static UserResponse user(User user) {
-    return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());
+    return new UserResponse(
+      user.getId(),
+      user.getName(),
+      user.getEmail(),
+      user.getRole(),
+      user.isEmailVerified(),
+      user.isTwoFactorEnabled(),
+      user.isBookingAlertsEnabled(),
+      user.isEmailDigestEnabled(),
+      user.isPushNotificationsEnabled());
   }
 
   public static ResourceResponse resource(Resource resource) {

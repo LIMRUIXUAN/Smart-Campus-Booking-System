@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.roomio.booking.dto.ChangePasswordRequest;
+import com.roomio.booking.dto.CodeConfirmationRequest;
+import com.roomio.booking.dto.PasswordConfirmationRequest;
 import com.roomio.booking.dto.RegisterRequest;
+import com.roomio.booking.dto.UpdateNotificationSettingsRequest;
 import com.roomio.booking.dto.UpdateProfileRequest;
 import com.roomio.booking.model.Role;
 import com.roomio.booking.model.User;
@@ -91,5 +94,51 @@ class AuthServiceTest {
       new ChangePasswordRequest("password", "password")))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("must be different");
+  }
+
+  @Test
+  void emailVerificationRoundTripMarksUserVerified() {
+    authService.register(new RegisterRequest("Alya Tan", "student@campus.test", "password"));
+
+    var challenge = authService.requestEmailVerification("student@campus.test");
+    var result = authService.confirmEmailVerification("student@campus.test", new CodeConfirmationRequest(challenge.code()));
+
+    assertThat(result.user().emailVerified()).isTrue();
+  }
+
+  @Test
+  void enablingTwoFactorRequiresVerifiedEmail() {
+    authService.register(new RegisterRequest("Alya Tan", "student@campus.test", "password"));
+
+    assertThatThrownBy(() -> authService.requestTwoFactorSetup("student@campus.test"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Verify your email");
+  }
+
+  @Test
+  void twoFactorRoundTripCanEnableAndDisable() {
+    authService.register(new RegisterRequest("Alya Tan", "student@campus.test", "password"));
+    var emailChallenge = authService.requestEmailVerification("student@campus.test");
+    authService.confirmEmailVerification("student@campus.test", new CodeConfirmationRequest(emailChallenge.code()));
+
+    var twoFactorChallenge = authService.requestTwoFactorSetup("student@campus.test");
+    var enabled = authService.confirmTwoFactorSetup("student@campus.test", new CodeConfirmationRequest(twoFactorChallenge.code()));
+    var disabled = authService.disableTwoFactor("student@campus.test", new PasswordConfirmationRequest("password"));
+
+    assertThat(enabled.user().twoFactorEnabled()).isTrue();
+    assertThat(disabled.user().twoFactorEnabled()).isFalse();
+  }
+
+  @Test
+  void notificationSettingsCanBeUpdated() {
+    authService.register(new RegisterRequest("Alya Tan", "student@campus.test", "password"));
+
+    var updated = authService.updateNotificationSettings(
+      "student@campus.test",
+      new UpdateNotificationSettingsRequest(false, true, false));
+
+    assertThat(updated.user().bookingAlertsEnabled()).isFalse();
+    assertThat(updated.user().emailDigestEnabled()).isTrue();
+    assertThat(updated.user().pushNotificationsEnabled()).isFalse();
   }
 }

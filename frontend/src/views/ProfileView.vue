@@ -5,10 +5,8 @@ import {
   CheckCircle2,
   ChevronRight,
   KeyRound,
-  Mail,
   MoonStar,
   ShieldCheck,
-  Smartphone,
   UserRound,
 } from '@lucide/vue'
 import AppShell from '@/components/layout/AppShell.vue'
@@ -48,22 +46,15 @@ const quickActions = computed(() => [
   { title: 'Notification settings', description: 'Choose what reminders and alerts you want.', icon: Bell },
 ])
 
-const preferenceItems = computed(() => [
-  { title: 'Email digest', value: 'Daily', icon: Mail },
-  { title: 'Push notifications', value: 'On', icon: Smartphone },
-  { title: 'Theme', value: 'Light', icon: MoonStar },
-])
-
-const cleanupItems = computed(() => [
-  'Keep one notification settings area only.',
-  'Remove duplicate verification labels if repeated elsewhere.',
-  'Delete unused profile actions after testing the final flow.',
-])
-
 const showEditModal = ref(false)
 const showSecurityModal = ref(false)
+const showEmailVerificationModal = ref(false)
+const showTwoFactorModal = ref(false)
+const showNotificationModal = ref(false)
 const saveError = ref('')
 const saveSuccess = ref('')
+const themeEnabled = ref(localStorage.getItem('roomio-profile-theme') !== 'light')
+const verificationCodeHint = ref('')
 const form = ref({
   name: '',
   email: '',
@@ -72,6 +63,17 @@ const passwordForm = ref({
   currentPassword: '',
   newPassword: '',
   confirmPassword: '',
+})
+const codeForm = ref({
+  code: '',
+})
+const disableTwoFactorForm = ref({
+  currentPassword: '',
+})
+const notificationForm = ref({
+  bookingAlertsEnabled: true,
+  emailDigestEnabled: true,
+  pushNotificationsEnabled: true,
 })
 
 const openEditModal = () => {
@@ -101,6 +103,106 @@ const openSecurityModal = () => {
 
 const closeSecurityModal = () => {
   showSecurityModal.value = false
+}
+
+const openNotificationModal = () => {
+  notificationForm.value = {
+    bookingAlertsEnabled: auth.user?.bookingAlertsEnabled ?? true,
+    emailDigestEnabled: auth.user?.emailDigestEnabled ?? true,
+    pushNotificationsEnabled: auth.user?.pushNotificationsEnabled ?? true,
+  }
+  saveError.value = ''
+  saveSuccess.value = ''
+  showNotificationModal.value = true
+}
+
+const closeNotificationModal = () => {
+  showNotificationModal.value = false
+}
+
+const toggleTheme = () => {
+  themeEnabled.value = !themeEnabled.value
+  localStorage.setItem('roomio-profile-theme', themeEnabled.value ? 'dark' : 'light')
+}
+
+const openEmailVerificationModal = async () => {
+  saveError.value = ''
+  saveSuccess.value = ''
+  try {
+    const result = await auth.requestEmailVerification()
+    verificationCodeHint.value = result.code || ''
+    codeForm.value.code = ''
+    showEmailVerificationModal.value = true
+  } catch (error) {
+    saveError.value = error.message
+  }
+}
+
+const confirmEmailVerification = async () => {
+  saveError.value = ''
+  saveSuccess.value = ''
+  try {
+    await auth.confirmEmailVerification(codeForm.value.code.trim())
+    saveSuccess.value = 'Email verified successfully.'
+    showEmailVerificationModal.value = false
+  } catch (error) {
+    saveError.value = error.message
+  }
+}
+
+const openTwoFactorModal = async () => {
+  saveError.value = ''
+  saveSuccess.value = ''
+  if (auth.user?.twoFactorEnabled) {
+    disableTwoFactorForm.value.currentPassword = ''
+    showTwoFactorModal.value = true
+    return
+  }
+
+  try {
+    const result = await auth.requestTwoFactor()
+    verificationCodeHint.value = result.code || ''
+    codeForm.value.code = ''
+    showTwoFactorModal.value = true
+  } catch (error) {
+    saveError.value = error.message
+  }
+}
+
+const confirmTwoFactor = async () => {
+  saveError.value = ''
+  saveSuccess.value = ''
+  try {
+    await auth.confirmTwoFactor(codeForm.value.code.trim())
+    saveSuccess.value = 'Two-step login enabled successfully.'
+    showTwoFactorModal.value = false
+  } catch (error) {
+    saveError.value = error.message
+  }
+}
+
+const disableTwoFactor = async () => {
+  saveError.value = ''
+  saveSuccess.value = ''
+  try {
+    await auth.disableTwoFactor(disableTwoFactorForm.value.currentPassword)
+    saveSuccess.value = 'Two-step login disabled.'
+    showTwoFactorModal.value = false
+  } catch (error) {
+    saveError.value = error.message
+  }
+}
+
+const saveNotificationSettings = async () => {
+  saveError.value = ''
+  saveSuccess.value = ''
+  try {
+    await auth.updateNotificationSettings(notificationForm.value)
+    saveSuccess.value = 'Notification settings updated successfully.'
+    showNotificationModal.value = false
+  } catch (error) {
+    saveError.value = error.message
+  }
 }
 
 const saveProfile = async () => {
@@ -165,34 +267,7 @@ const savePassword = async () => {
       </div>
     </section>
 
-    <section class="mt-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-      <article class="card">
-        <div class="flex items-center gap-3">
-          <div class="rounded-full bg-primary/10 p-3 text-primary">
-            <UserRound class="h-5 w-5" />
-          </div>
-          <div>
-            <h2 class="section-title">Basic information</h2>
-            <p class="mt-1 text-sm text-on-surface-variant">The main details most users expect to find first.</p>
-          </div>
-        </div>
-
-        <div class="mt-5 grid gap-3 sm:grid-cols-2">
-          <div class="profile-info-card">
-            <p class="label-caps">Full name</p>
-            <p class="mt-2 font-semibold text-on-background">{{ userName }}</p>
-          </div>
-          <div class="profile-info-card">
-            <p class="label-caps">Role</p>
-            <p class="mt-2 font-semibold text-on-background">{{ role === 'admin' ? 'Administrator' : 'Student' }}</p>
-          </div>
-          <div class="profile-info-card sm:col-span-2">
-            <p class="label-caps">Email</p>
-            <p class="mt-2 font-semibold text-on-background">{{ userEmail }}</p>
-          </div>
-        </div>
-      </article>
-
+    <section class="mt-8">
       <article class="card">
         <div class="flex items-center gap-3">
           <div class="rounded-full bg-primary/10 p-3 text-primary">
@@ -208,9 +283,19 @@ const savePassword = async () => {
           <div class="profile-row">
             <div>
               <p class="font-semibold text-on-background">Email verification</p>
-              <p class="text-sm text-on-surface-variant">Your email is confirmed and active.</p>
+              <p class="text-sm text-on-surface-variant">
+                {{ auth.user?.emailVerified ? 'Your email is confirmed and active.' : 'Verify your email to unlock more security features.' }}
+              </p>
             </div>
-            <span class="profile-pill">Verified</span>
+            <button
+              v-if="!auth.user?.emailVerified"
+              type="button"
+              class="profile-pill profile-pill--button"
+              @click="openEmailVerificationModal"
+            >
+              Verify
+            </button>
+            <span v-else class="profile-pill">Verified</span>
           </div>
           <div class="profile-row">
             <div>
@@ -222,26 +307,34 @@ const savePassword = async () => {
           <div class="profile-row">
             <div>
               <p class="font-semibold text-on-background">Two-step login</p>
-              <p class="text-sm text-on-surface-variant">Recommended for extra account protection.</p>
+              <p class="text-sm text-on-surface-variant">
+                {{ auth.user?.twoFactorEnabled ? 'Two-step login is enabled for this account.' : 'Recommended for extra account protection.' }}
+              </p>
             </div>
-            <span class="profile-pill">Available</span>
+            <button
+              type="button"
+              class="profile-pill profile-pill--button"
+              @click="openTwoFactorModal"
+            >
+              {{ auth.user?.twoFactorEnabled ? 'Disable' : 'Enable' }}
+            </button>
           </div>
         </div>
       </article>
     </section>
 
-    <section class="mt-8 grid gap-6 lg:grid-cols-2">
+    <section class="mt-8">
       <article class="card">
         <h2 class="section-title">Quick actions</h2>
-        <p class="mt-1 text-sm text-on-surface-variant">Simple entry points instead of a long settings list.</p>
+        <p class="mt-1 text-sm text-on-surface-variant">Keep the important account actions in one simple place.</p>
 
-        <div class="mt-5 space-y-3">
+        <div class="mt-5 grid gap-3">
           <button
             v-for="action in quickActions"
             :key="action.title"
             type="button"
             class="profile-row profile-row--button"
-            @click="action.title === 'Edit profile' ? openEditModal() : action.title === 'Change password' ? openSecurityModal() : null"
+            @click="action.title === 'Edit profile' ? openEditModal() : action.title === 'Change password' ? openSecurityModal() : action.title === 'Notification settings' ? openNotificationModal() : null"
           >
             <div class="flex items-start gap-3">
               <div class="rounded-full bg-primary/10 p-3 text-primary">
@@ -254,37 +347,26 @@ const savePassword = async () => {
             </div>
             <ChevronRight class="h-4 w-4 shrink-0 text-on-surface-variant" />
           </button>
-        </div>
-      </article>
 
-      <article class="card">
-        <h2 class="section-title">Preferences</h2>
-        <p class="mt-1 text-sm text-on-surface-variant">A small, readable snapshot of your current settings.</p>
-
-        <div class="mt-5 space-y-3">
-          <div v-for="item in preferenceItems" :key="item.title" class="profile-row">
+          <div class="profile-row">
             <div class="flex items-center gap-3">
               <div class="rounded-full bg-primary/10 p-3 text-primary">
-                <component :is="item.icon" class="h-5 w-5" />
+                <MoonStar class="h-5 w-5" />
               </div>
-              <div>
-                <p class="font-semibold text-on-background">{{ item.title }}</p>
+              <div class="text-left">
+                <p class="font-semibold text-on-background">Theme</p>
+                <p class="text-sm text-on-surface-variant">Switch between light and dark profile appearance.</p>
               </div>
             </div>
-            <span class="profile-pill">{{ item.value }}</span>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="mt-8">
-      <article class="card">
-        <h2 class="section-title">Cleanup notes</h2>
-        <p class="mt-1 text-sm text-on-surface-variant">A short reminder for later when we remove duplicate or unused profile functions.</p>
-
-        <div class="mt-5 grid gap-3 md:grid-cols-3">
-          <div v-for="item in cleanupItems" :key="item" class="profile-info-card">
-            <p class="text-sm text-on-surface-variant">{{ item }}</p>
+            <button
+              type="button"
+              class="theme-toggle"
+              :class="{ 'theme-toggle--active': themeEnabled }"
+              :aria-pressed="themeEnabled"
+              @click="toggleTheme"
+            >
+              <span class="theme-toggle__thumb"></span>
+            </button>
           </div>
         </div>
       </article>
@@ -369,6 +451,131 @@ const savePassword = async () => {
         </div>
       </form>
     </div>
+
+    <div v-if="showEmailVerificationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-on-background/35 p-4 backdrop-blur-sm">
+      <form class="card w-full max-w-lg" @submit.prevent="confirmEmailVerification">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="section-title">Verify email</h2>
+            <p class="mt-1 text-sm text-on-surface-variant">Enter the verification code for this account.</p>
+          </div>
+          <button type="button" class="rounded-control px-3 py-2 text-on-surface-variant hover:bg-surface-container-low" @click="showEmailVerificationModal = false">
+            Close
+          </button>
+        </div>
+
+        <div class="mt-5 rounded-2xl bg-surface-container-low px-4 py-3 text-sm text-on-surface-variant">
+          Demo code for local testing: <span class="font-semibold text-primary">{{ verificationCodeHint }}</span>
+        </div>
+
+        <div class="mt-6">
+          <label class="mb-2 block text-sm font-semibold">Verification code</label>
+          <input v-model="codeForm.code" class="field" inputmode="numeric" maxlength="6" required />
+        </div>
+
+        <p v-if="saveError" class="mt-4 rounded-xl bg-error-container/60 px-4 py-3 text-sm text-on-error-container">{{ saveError }}</p>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <BaseButton type="button" variant="secondary" @click="showEmailVerificationModal = false">Cancel</BaseButton>
+          <BaseButton type="submit" :disabled="auth.loading">
+            {{ auth.loading ? 'Verifying...' : 'Confirm email' }}
+          </BaseButton>
+        </div>
+      </form>
+    </div>
+
+    <div v-if="showTwoFactorModal" class="fixed inset-0 z-50 flex items-center justify-center bg-on-background/35 p-4 backdrop-blur-sm">
+      <form class="card w-full max-w-lg" @submit.prevent="auth.user?.twoFactorEnabled ? disableTwoFactor() : confirmTwoFactor()">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="section-title">Two-step login</h2>
+            <p class="mt-1 text-sm text-on-surface-variant">
+              {{ auth.user?.twoFactorEnabled ? 'Confirm your password to disable two-step login.' : 'Enter the setup code to enable two-step login.' }}
+            </p>
+          </div>
+          <button type="button" class="rounded-control px-3 py-2 text-on-surface-variant hover:bg-surface-container-low" @click="showTwoFactorModal = false">
+            Close
+          </button>
+        </div>
+
+        <template v-if="!auth.user?.twoFactorEnabled">
+          <div class="mt-5 rounded-2xl bg-surface-container-low px-4 py-3 text-sm text-on-surface-variant">
+            Demo code for local testing: <span class="font-semibold text-primary">{{ verificationCodeHint }}</span>
+          </div>
+          <div class="mt-6">
+            <label class="mb-2 block text-sm font-semibold">Setup code</label>
+            <input v-model="codeForm.code" class="field" inputmode="numeric" maxlength="6" required />
+          </div>
+        </template>
+
+        <div v-else class="mt-6">
+          <label class="mb-2 block text-sm font-semibold">Current password</label>
+          <input v-model="disableTwoFactorForm.currentPassword" class="field" type="password" required />
+        </div>
+
+        <p v-if="saveError" class="mt-4 rounded-xl bg-error-container/60 px-4 py-3 text-sm text-on-error-container">{{ saveError }}</p>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <BaseButton type="button" variant="secondary" @click="showTwoFactorModal = false">Cancel</BaseButton>
+          <BaseButton type="submit" :disabled="auth.loading">
+            {{
+              auth.loading
+                ? 'Saving...'
+                : auth.user?.twoFactorEnabled
+                  ? 'Disable two-step login'
+                  : 'Enable two-step login'
+            }}
+          </BaseButton>
+        </div>
+      </form>
+    </div>
+
+    <div v-if="showNotificationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-on-background/35 p-4 backdrop-blur-sm">
+      <form class="card w-full max-w-lg" @submit.prevent="saveNotificationSettings">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="section-title">Notification settings</h2>
+            <p class="mt-1 text-sm text-on-surface-variant">Choose which reminders and alerts you want to receive.</p>
+          </div>
+          <button type="button" class="rounded-control px-3 py-2 text-on-surface-variant hover:bg-surface-container-low" @click="closeNotificationModal">
+            Close
+          </button>
+        </div>
+
+        <div class="mt-6 space-y-4">
+          <label class="notification-option">
+            <div>
+              <p class="font-semibold text-on-background">Booking alerts</p>
+              <p class="text-sm text-on-surface-variant">Instant reminders for approvals, cancellations, and booking changes.</p>
+            </div>
+            <input v-model="notificationForm.bookingAlertsEnabled" type="checkbox" class="h-5 w-5 accent-primary" />
+          </label>
+          <label class="notification-option">
+            <div>
+              <p class="font-semibold text-on-background">Email digest</p>
+              <p class="text-sm text-on-surface-variant">Daily summary of account activity and updates.</p>
+            </div>
+            <input v-model="notificationForm.emailDigestEnabled" type="checkbox" class="h-5 w-5 accent-primary" />
+          </label>
+          <label class="notification-option">
+            <div>
+              <p class="font-semibold text-on-background">Push notifications</p>
+              <p class="text-sm text-on-surface-variant">Urgent alerts for conflicts, returns, and important changes.</p>
+            </div>
+            <input v-model="notificationForm.pushNotificationsEnabled" type="checkbox" class="h-5 w-5 accent-primary" />
+          </label>
+        </div>
+
+        <p v-if="saveError" class="mt-4 rounded-xl bg-error-container/60 px-4 py-3 text-sm text-on-error-container">{{ saveError }}</p>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <BaseButton type="button" variant="secondary" @click="closeNotificationModal">Cancel</BaseButton>
+          <BaseButton type="submit" :disabled="auth.loading">
+            {{ auth.loading ? 'Saving...' : 'Save settings' }}
+          </BaseButton>
+        </div>
+      </form>
+    </div>
   </AppShell>
 </template>
 
@@ -400,12 +607,6 @@ const savePassword = async () => {
   flex-shrink: 0;
 }
 
-.profile-info-card {
-  border-radius: 1.15rem;
-  padding: 1rem 1.1rem;
-  background: rgb(244 247 252 / 0.9);
-}
-
 .profile-row {
   display: flex;
   align-items: center;
@@ -430,11 +631,60 @@ const savePassword = async () => {
 .profile-pill {
   flex-shrink: 0;
   border-radius: 999px;
-  padding: 0.35rem 0.8rem;
+  padding: 0.45rem 0.9rem;
   background: rgba(30, 58, 138, 0.1);
   color: #1e3a8a;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
+}
+
+.profile-pill--button {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.profile-pill--button:hover {
+  background: rgba(30, 58, 138, 0.16);
+  transform: translateY(-1px);
+}
+
+.notification-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 1.15rem;
+  padding: 1rem 1.1rem;
+  background: rgb(244 247 252 / 0.9);
+}
+
+.theme-toggle {
+  position: relative;
+  width: 3.4rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.35);
+  transition: background 0.2s ease;
+}
+
+.theme-toggle--active {
+  background: #1e3a8a;
+}
+
+.theme-toggle__thumb {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.theme-toggle--active .theme-toggle__thumb {
+  transform: translateX(1.4rem);
 }
 
 @media (max-width: 760px) {

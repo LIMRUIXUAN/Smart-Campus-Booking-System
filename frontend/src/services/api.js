@@ -103,6 +103,64 @@ export const api = {
     }
   },
 
+  async requestEmailVerification() {
+    try {
+      const { data } = await client.post('/auth/me/email-verification/request')
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async confirmEmailVerification(code) {
+    try {
+      const { data } = await client.post('/auth/me/email-verification/confirm', { code })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async requestTwoFactor() {
+    try {
+      const { data } = await client.post('/auth/me/two-factor/request')
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async confirmTwoFactor(code) {
+    try {
+      const { data } = await client.post('/auth/me/two-factor/confirm', { code })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async disableTwoFactor(currentPassword) {
+    try {
+      const { data } = await client.post('/auth/me/two-factor/disable', { currentPassword })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async updateNotificationSettings(payload) {
+    try {
+      const { data } = await client.put('/auth/me/notifications', {
+        bookingAlertsEnabled: payload.bookingAlertsEnabled,
+        emailDigestEnabled: payload.emailDigestEnabled,
+        pushNotificationsEnabled: payload.pushNotificationsEnabled,
+      })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
   async getResources() {
     const { data } = await client.get('/resources')
     return data

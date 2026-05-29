@@ -1,11 +1,15 @@
 package com.roomio.booking.controller;
 
+import com.roomio.booking.dto.ActionResponse;
 import com.roomio.booking.dto.AuthRequest;
 import com.roomio.booking.dto.AuthResponse;
 import com.roomio.booking.dto.ChangePasswordRequest;
+import com.roomio.booking.dto.CodeConfirmationRequest;
+import com.roomio.booking.dto.PasswordConfirmationRequest;
 import com.roomio.booking.dto.RegisterRequest;
+import com.roomio.booking.dto.UpdateNotificationSettingsRequest;
 import com.roomio.booking.dto.UpdateProfileRequest;
-import com.roomio.booking.dto.ActionResponse;
+import com.roomio.booking.dto.VerificationChallengeResponse;
 import com.roomio.booking.service.AuthService;
 import jakarta.validation.Valid;
 import java.security.Principal;
@@ -43,5 +47,35 @@ public class AuthController {
   @PatchMapping("/me/password")
   public ActionResponse changePassword(@Valid @RequestBody ChangePasswordRequest request, Principal principal) {
     return authService.changePassword(principal.getName(), request);
+  }
+
+  @PostMapping("/me/email-verification/request")
+  public VerificationChallengeResponse requestEmailVerification(Principal principal) {
+    return authService.requestEmailVerification(principal.getName());
+  }
+
+  @PostMapping("/me/email-verification/confirm")
+  public AuthResponse confirmEmailVerification(@Valid @RequestBody CodeConfirmationRequest request, Principal principal) {
+    return authService.confirmEmailVerification(principal.getName(), request);
+  }
+
+  @PostMapping("/me/two-factor/request")
+  public VerificationChallengeResponse requestTwoFactor(Principal principal) {
+    return authService.requestTwoFactorSetup(principal.getName());
+  }
+
+  @PostMapping("/me/two-factor/confirm")
+  public AuthResponse confirmTwoFactor(@Valid @RequestBody CodeConfirmationRequest request, Principal principal) {
+    return authService.confirmTwoFactorSetup(principal.getName(), request);
+  }
+
+  @PostMapping("/me/two-factor/disable")
+  public AuthResponse disableTwoFactor(@Valid @RequestBody PasswordConfirmationRequest request, Principal principal) {
+    return authService.disableTwoFactor(principal.getName(), request);
+  }
+
+  @PutMapping("/me/notifications")
+  public AuthResponse updateNotificationSettings(@RequestBody UpdateNotificationSettingsRequest request, Principal principal) {
+    return authService.updateNotificationSettings(principal.getName(), request);
   }
 }
