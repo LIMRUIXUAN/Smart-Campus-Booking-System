@@ -79,6 +79,30 @@ export const api = {
     }
   },
 
+  async updateProfile(payload) {
+    try {
+      const { data } = await client.put('/auth/me', {
+        name: payload.name,
+        email: payload.email,
+      })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async changePassword(payload) {
+    try {
+      const { data } = await client.patch('/auth/me/password', {
+        currentPassword: payload.currentPassword,
+        newPassword: payload.newPassword,
+      })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
   async getResources() {
     const { data } = await client.get('/resources')
     return data
@@ -97,6 +121,7 @@ export const api = {
       capacity: Number(resource.capacity),
       status: resource.status,
       description: resource.description,
+      imageUrl: resource.imageUrl || '',
       features: resource.features || [],
     }
     const { data } = resource.id

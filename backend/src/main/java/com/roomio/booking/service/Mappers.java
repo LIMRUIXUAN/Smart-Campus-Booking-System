@@ -24,6 +24,7 @@ public final class Mappers {
       resource.getCapacity(),
       resource.getStatus(),
       resource.getDescription(),
+      resource.getImageUrl(),
       resource.getFeatures());
   }
 

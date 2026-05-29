@@ -3,13 +3,16 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   BarChart3,
+  Bell,
   BookOpenCheck,
   CalendarPlus,
   ClipboardList,
   Home,
   LibraryBig,
   LogOut,
+  ShieldCheck,
   Settings2,
+  UserCircle2,
 } from '@lucide/vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -32,17 +35,29 @@ const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
 
+const profileRoute = computed(() => (props.role === 'admin' ? 'admin-profile' : 'student-profile'))
+const userInitials = computed(() =>
+  (auth.user?.name || 'Campus User')
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase(),
+)
+
 const navItems = computed(() =>
   props.role === 'admin'
     ? [
         { label: 'Dashboard', route: 'admin-dashboard', icon: BarChart3 },
         { label: 'Resources', route: 'admin-resources', icon: Settings2 },
         { label: 'Bookings', route: 'admin-bookings', icon: ClipboardList },
+        { label: 'Profile', route: 'admin-profile', icon: UserCircle2 },
       ]
     : [
         { label: 'Dashboard', route: 'student-dashboard', icon: Home },
         { label: 'Resources', route: 'student-resources', icon: LibraryBig },
         { label: 'My Bookings', route: 'my-bookings', icon: BookOpenCheck },
+        { label: 'Profile', route: 'student-profile', icon: UserCircle2 },
       ],
 )
 
@@ -87,6 +102,23 @@ const logout = () => {
         </RouterLink>
       </nav>
 
+      <RouterLink
+        :to="{ name: profileRoute }"
+        class="mt-5 rounded-2xl border border-outline-variant bg-surface-container-lowest p-4 transition hover:bg-surface-container-high"
+      >
+        <div class="flex items-center gap-3">
+          <div class="grid h-11 w-11 place-items-center rounded-2xl bg-primary text-sm font-bold text-white">{{ userInitials }}</div>
+          <div class="min-w-0">
+            <p class="truncate text-sm font-semibold text-on-background">{{ auth.user?.name || 'Campus User' }}</p>
+            <p class="truncate text-xs text-on-surface-variant">{{ auth.user?.email || 'account@roomio.local' }}</p>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-xs font-semibold text-on-surface-variant">
+          <span class="inline-flex items-center gap-2"><ShieldCheck class="h-4 w-4 text-primary" />Verified</span>
+          <span class="inline-flex items-center gap-2"><Bell class="h-4 w-4 text-primary" />Alerts</span>
+        </div>
+      </RouterLink>
+
       <button
         class="mt-5 flex items-center gap-3 rounded-control px-3 py-3 text-left text-sm font-semibold text-on-surface-variant hover:bg-surface-container-high"
         @click="logout"
@@ -101,9 +133,14 @@ const logout = () => {
           <img src="/logo/logo_normal.png" alt="RooMio logo" class="h-8 w-8 rounded-control object-contain" />
           RooMio
         </RouterLink>
-        <button class="rounded-control p-2 text-on-surface-variant" @click="logout" aria-label="Logout">
-          <LogOut class="h-5 w-5" />
-        </button>
+        <div class="flex items-center gap-2">
+          <RouterLink :to="{ name: profileRoute }" class="rounded-control p-2 text-on-surface-variant" aria-label="Profile">
+            <UserCircle2 class="h-5 w-5" />
+          </RouterLink>
+          <button class="rounded-control p-2 text-on-surface-variant" @click="logout" aria-label="Logout">
+            <LogOut class="h-5 w-5" />
+          </button>
+        </div>
       </header>
 
       <div class="mx-auto w-full max-w-container px-4 pb-24 pt-6 md:px-8 md:py-10">

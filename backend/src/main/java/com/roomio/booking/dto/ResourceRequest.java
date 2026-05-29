@@ -14,5 +14,6 @@ public record ResourceRequest(
     @Min(1) Integer capacity,
     ResourceStatus status,
     @NotBlank String description,
+    String imageUrl,
     List<String> features) {
 }

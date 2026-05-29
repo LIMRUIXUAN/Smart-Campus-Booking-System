@@ -45,6 +45,37 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async updateProfile(payload) {
+      this.loading = true
+      this.error = ''
+      try {
+        const { user, token } = await api.updateProfile(payload)
+        this.user = user
+        this.token = token
+        localStorage.setItem('campus-user', JSON.stringify(user))
+        localStorage.setItem('campus-token', token)
+        return user
+      } catch (error) {
+        this.error = error.message
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async changePassword(payload) {
+      this.loading = true
+      this.error = ''
+      try {
+        return await api.changePassword(payload)
+      } catch (error) {
+        this.error = error.message
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
     logout() {
       this.user = null
       this.token = null

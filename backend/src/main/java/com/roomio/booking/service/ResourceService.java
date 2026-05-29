@@ -37,6 +37,7 @@ public class ResourceService {
       request.capacity(),
       request.status() == null ? ResourceStatus.ACTIVE : request.status(),
       request.description().trim(),
+      normalizeImageUrl(request.imageUrl()),
       request.features()));
     return Mappers.resource(resource);
   }
@@ -50,6 +51,7 @@ public class ResourceService {
     resource.setCapacity(request.capacity());
     resource.setStatus(request.status() == null ? ResourceStatus.ACTIVE : request.status());
     resource.setDescription(request.description().trim());
+    resource.setImageUrl(normalizeImageUrl(request.imageUrl()));
     resource.setFeatures(request.features());
     return Mappers.resource(resource);
   }
@@ -63,5 +65,18 @@ public class ResourceService {
 
   Resource find(String id) {
     return resources.findById(id).orElseThrow(() -> new NotFoundException("Resource not found."));
+  }
+
+  private String normalizeImageUrl(String imageUrl) {
+    if (imageUrl == null || imageUrl.isBlank()) {
+      return null;
+    }
+
+    String trimmed = imageUrl.trim();
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("data:image/")) {
+      return trimmed;
+    }
+
+    throw new IllegalArgumentException("Image must be an http(s) URL or an uploaded image.");
   }
 }

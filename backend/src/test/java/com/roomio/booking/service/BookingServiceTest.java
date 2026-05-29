@@ -55,11 +55,11 @@ class BookingServiceTest {
     student = users.save(new User("u-student-test", "Alya Tan", "student-test@campus.test", "hash", Role.STUDENT));
     other = users.save(new User("u-other-test", "Nadia Lee", "other-test@campus.test", "hash", Role.STUDENT));
     roomA = resources.save(new Resource("room-a-test", "Study Room A", ResourceType.ROOM, "Library", 4,
-      ResourceStatus.ACTIVE, "Quiet room", List.of("Wi-Fi")));
+      ResourceStatus.ACTIVE, "Quiet room", null, List.of("Wi-Fi")));
     roomB = resources.save(new Resource("room-b-test", "Study Room B", ResourceType.ROOM, "Library", 4,
-      ResourceStatus.ACTIVE, "Quiet room", List.of("Wi-Fi")));
+      ResourceStatus.ACTIVE, "Quiet room", null, List.of("Wi-Fi")));
     inactiveRoom = resources.save(new Resource("room-inactive-test", "Inactive Room", ResourceType.ROOM, "Library", 4,
-      ResourceStatus.INACTIVE, "Maintenance", List.of()));
+      ResourceStatus.INACTIVE, "Maintenance", null, List.of()));
     date = LocalDate.now().plusDays(3);
   }
 

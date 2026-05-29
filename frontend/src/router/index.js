@@ -10,6 +10,7 @@ import MyBookingsView from '@/views/student/MyBookingsView.vue'
 import AdminDashboardView from '@/views/admin/AdminDashboardView.vue'
 import AdminResourcesView from '@/views/admin/AdminResourcesView.vue'
 import AdminBookingsView from '@/views/admin/AdminBookingsView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 
 const routes = [
   { path: '/', name: 'landing', component: LandingView },
@@ -40,6 +41,12 @@ const routes = [
     meta: { requiresAuth: true, role: 'student' },
   },
   {
+    path: '/student/profile',
+    name: 'student-profile',
+    component: ProfileView,
+    meta: { requiresAuth: true, role: 'student' },
+  },
+  {
     path: '/admin',
     name: 'admin-dashboard',
     component: AdminDashboardView,
@@ -55,6 +62,12 @@ const routes = [
     path: '/admin/bookings',
     name: 'admin-bookings',
     component: AdminBookingsView,
+    meta: { requiresAuth: true, role: 'admin' },
+  },
+  {
+    path: '/admin/profile',
+    name: 'admin-profile',
+    component: ProfileView,
     meta: { requiresAuth: true, role: 'admin' },
   },
 ]

@@ -2,7 +2,10 @@ package com.roomio.booking.service;
 
 import com.roomio.booking.dto.AuthRequest;
 import com.roomio.booking.dto.AuthResponse;
+import com.roomio.booking.dto.ChangePasswordRequest;
 import com.roomio.booking.dto.RegisterRequest;
+import com.roomio.booking.dto.UpdateProfileRequest;
+import com.roomio.booking.dto.ActionResponse;
 import com.roomio.booking.model.Role;
 import com.roomio.booking.model.User;
 import com.roomio.booking.repository.UserRepository;
@@ -52,5 +55,43 @@ public class AuthService {
     }
 
     return new AuthResponse(Mappers.user(user), jwtService.issue(user));
+  }
+
+  @Transactional
+  public AuthResponse updateProfile(String currentEmail, UpdateProfileRequest request) {
+    User user = users.findByEmailIgnoreCase(currentEmail)
+      .orElseThrow(() -> new BadCredentialsException("Invalid session."));
+
+    String nextName = request.name().trim();
+    String nextEmail = request.email().trim().toLowerCase(Locale.ROOT);
+
+    users.findByEmailIgnoreCase(nextEmail)
+      .filter(existing -> !existing.getId().equals(user.getId()))
+      .ifPresent(existing -> {
+        throw new IllegalArgumentException("An account already exists for this email.");
+      });
+
+    user.setName(nextName);
+    user.setEmail(nextEmail);
+
+    return new AuthResponse(Mappers.user(user), jwtService.issue(user));
+  }
+
+  @Transactional
+  public ActionResponse changePassword(String currentEmail, ChangePasswordRequest request) {
+    User user = users.findByEmailIgnoreCase(currentEmail)
+      .orElseThrow(() -> new BadCredentialsException("Invalid session."));
+
+    if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
+      throw new BadCredentialsException("Current password is incorrect.");
+    }
+
+    String nextPassword = request.newPassword().trim();
+    if (passwordEncoder.matches(nextPassword, user.getPasswordHash())) {
+      throw new IllegalArgumentException("New password must be different from the current password.");
+    }
+
+    user.setPasswordHash(passwordEncoder.encode(nextPassword));
+    return new ActionResponse("Password updated successfully.");
   }
 }

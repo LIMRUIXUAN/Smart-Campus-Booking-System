@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted } from 'vue'
-import { ArrowRight, CalendarCheck2, CheckCircle2, Clock3, Sparkles, XCircle } from '@lucide/vue'
+import { ArrowRight, CalendarCheck2, CheckCircle2, Clock3, XCircle } from '@lucide/vue'
 import AppShell from '@/components/layout/AppShell.vue'
 import AnalyticsCard from '@/components/ui/AnalyticsCard.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -109,26 +109,7 @@ const totalCapacity = computed(() => activeResources.value.reduce((sum, resource
       </div>
     </section>
 
-    <section class="mt-8 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-      <div class="card">
-        <div class="mb-5">
-          <h2 class="section-title">Quick Actions</h2>
-          <p class="mt-1 text-on-surface-variant">Go straight to the most common student tasks.</p>
-        </div>
-        <div class="grid gap-4 md:grid-cols-2">
-          <RouterLink :to="{ name: 'student-resources' }" class="dashboard-action-card">
-            <div class="dashboard-action-card__icon bg-primary-fixed text-on-primary-fixed"><Sparkles class="h-5 w-5" /></div>
-            <h3 class="font-semibold">Explore resources</h3>
-            <p class="text-sm text-on-surface-variant">Open the full filterable list of rooms, labs, and equipment.</p>
-          </RouterLink>
-          <RouterLink :to="{ name: 'my-bookings' }" class="dashboard-action-card">
-            <div class="dashboard-action-card__icon bg-secondary-fixed text-on-secondary-fixed-variant"><CalendarCheck2 class="h-5 w-5" /></div>
-            <h3 class="font-semibold">Review bookings</h3>
-            <p class="text-sm text-on-surface-variant">Check upcoming reservations, completions, and released slots.</p>
-          </RouterLink>
-        </div>
-      </div>
-
+    <section class="mt-8">
       <div class="card">
         <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -199,30 +180,3 @@ const totalCapacity = computed(() => activeResources.value.reduce((sum, resource
     </section>
   </AppShell>
 </template>
-
-<style scoped>
-.dashboard-action-card {
-  display: grid;
-  gap: 0.8rem;
-  border: 1px solid rgb(203 213 225 / 0.9);
-  border-radius: 1.3rem;
-  background: white;
-  padding: 1.1rem;
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
-}
-
-.dashboard-action-card:hover {
-  transform: translateY(-2px);
-  border-color: rgb(96 165 250 / 0.9);
-  box-shadow: 0 16px 30px rgb(59 130 246 / 0.1);
-}
-
-.dashboard-action-card__icon {
-  display: inline-flex;
-  width: 2.75rem;
-  height: 2.75rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.95rem;
-}
-</style>

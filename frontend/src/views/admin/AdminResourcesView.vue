@@ -5,10 +5,13 @@ import AppShell from '@/components/layout/AppShell.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import { useResourceStore } from '@/stores/resources'
+import { resolveResourceImage } from '@/utils/resourceImages'
 
 const resources = useResourceStore()
 const showModal = ref(false)
 const editing = ref(null)
+const submitError = ref('')
+const uploading = ref(false)
 const form = ref({
   name: '',
   type: 'Room',
@@ -16,6 +19,8 @@ const form = ref({
   capacity: 4,
   description: '',
   status: 'active',
+  imageUrl: '',
+  features: '',
 })
 
 onMounted(async () => {
@@ -24,8 +29,9 @@ onMounted(async () => {
 
 const openModal = (resource = null) => {
   editing.value = resource
+  submitError.value = ''
   form.value = resource
-    ? { ...resource }
+    ? { ...resource, imageUrl: resource.imageUrl || '', features: (resource.features || []).join(', ') }
     : {
         name: '',
         type: 'Room',
@@ -33,21 +39,66 @@ const openModal = (resource = null) => {
         capacity: 4,
         description: '',
         status: 'active',
-        features: [],
+        imageUrl: '',
+        features: '',
       }
   showModal.value = true
 }
 
 const save = async () => {
-  await resources.saveResource({
-    ...form.value,
-    capacity: Number(form.value.capacity),
-    features: Array.isArray(form.value.features) ? form.value.features : String(form.value.features || '').split(',').map((item) => item.trim()).filter(Boolean),
-  })
-  showModal.value = false
+  submitError.value = ''
+
+  try {
+    await resources.saveResource({
+      ...form.value,
+      imageUrl: String(form.value.imageUrl || '').trim(),
+      capacity: Number(form.value.capacity),
+      features: String(form.value.features || '')
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean),
+    })
+    showModal.value = false
+  } catch (error) {
+    submitError.value = error.message
+  }
 }
 
 const totalActive = computed(() => resources.resources.filter((resource) => resource.status === 'active').length)
+
+const readFileAsDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = () => reject(new Error('Unable to read the selected image.'))
+    reader.readAsDataURL(file)
+  })
+
+const handleImageUpload = async (event) => {
+  const [file] = event.target.files || []
+  event.target.value = ''
+
+  if (!file) return
+  if (!file.type.startsWith('image/')) {
+    submitError.value = 'Please upload an image file.'
+    return
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    submitError.value = 'Please upload an image smaller than 2 MB.'
+    return
+  }
+
+  uploading.value = true
+  submitError.value = ''
+
+  try {
+    form.value.imageUrl = await readFileAsDataUrl(file)
+  } catch (error) {
+    submitError.value = error.message
+  } finally {
+    uploading.value = false
+  }
+}
 </script>
 
 <template>
@@ -91,6 +142,7 @@ const totalActive = computed(() => resources.resources.filter((resource) => reso
         :class="resource.status === 'inactive' ? 'opacity-80' : ''"
       >
         <div class="absolute inset-y-0 left-0 w-1" :class="resource.status === 'active' ? 'bg-tertiary-container' : 'bg-outline'"></div>
+        <img :src="resolveResourceImage(resource)" :alt="`${resource.name} preview`" class="mb-5 h-44 w-full rounded-2xl object-cover" />
         <div class="flex items-start justify-between gap-3">
           <div>
             <div class="mb-3 flex gap-2">
@@ -160,13 +212,27 @@ const totalActive = computed(() => resources.resources.filter((resource) => reso
             <input v-model="form.features" class="field" placeholder="Wi-Fi, Whiteboard" />
           </div>
           <div class="md:col-span-2">
+            <label class="mb-2 block text-sm font-semibold">Image URL</label>
+            <input v-model="form.imageUrl" class="field" placeholder="https://... or leave blank to use uploaded image" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="mb-2 block text-sm font-semibold">Upload image</label>
+            <input class="field file:mr-4 file:rounded-control file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-on-primary" type="file" accept="image/*" @change="handleImageUpload" />
+            <p class="mt-2 text-xs text-on-surface-variant">Upload replaces the URL field and is stored in MySQL together with the resource.</p>
+          </div>
+          <div class="md:col-span-2">
             <label class="mb-2 block text-sm font-semibold">Description</label>
             <textarea v-model="form.description" class="field h-28 resize-none" required></textarea>
           </div>
+          <div v-if="form.imageUrl" class="md:col-span-2">
+            <label class="mb-2 block text-sm font-semibold">Preview</label>
+            <img :src="resolveResourceImage(form)" :alt="`${form.name || 'Resource'} preview`" class="h-52 w-full rounded-2xl object-cover" />
+          </div>
         </div>
+        <p v-if="submitError" class="mt-4 rounded-xl bg-error-container/60 px-4 py-3 text-sm text-on-error-container">{{ submitError }}</p>
         <div class="mt-6 flex justify-end gap-3">
           <BaseButton type="button" variant="secondary" @click="showModal = false">Cancel</BaseButton>
-          <BaseButton type="submit">Save Resource</BaseButton>
+          <BaseButton type="submit" :disabled="uploading">{{ uploading ? 'Uploading...' : 'Save Resource' }}</BaseButton>
         </div>
       </form>
     </div>

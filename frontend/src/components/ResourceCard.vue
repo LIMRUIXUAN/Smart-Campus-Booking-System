@@ -2,6 +2,7 @@
 import { MapPin, Users } from '@lucide/vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
+import { resolveResourceImage } from '@/utils/resourceImages'
 
 defineProps({
   resource: {
@@ -13,6 +14,11 @@ defineProps({
 
 <template>
   <article class="card flex h-full flex-col transition hover:-translate-y-0.5 hover:shadow-popover">
+    <img
+      :src="resolveResourceImage(resource)"
+      :alt="`${resource.name} preview`"
+      class="mb-5 h-44 w-full rounded-2xl object-cover"
+    />
     <div class="flex items-start justify-between gap-3">
       <div>
         <div class="mb-3 flex flex-wrap gap-2">

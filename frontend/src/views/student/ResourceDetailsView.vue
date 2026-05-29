@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ArrowLeft, CalendarDays, CheckCircle2, Clock, MapPin, Users } from '@lucide/vue'
+import { ArrowLeft, CheckCircle2, Clock, MapPin, Users } from '@lucide/vue'
 import AppShell from '@/components/layout/AppShell.vue'
 import AlertCard from '@/components/ui/AlertCard.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -10,6 +10,7 @@ import { defaultBookingDate } from '@/data/mockData'
 import { useAuthStore } from '@/stores/auth'
 import { useBookingStore } from '@/stores/bookings'
 import { useResourceStore } from '@/stores/resources'
+import { resolveResourceImage } from '@/utils/resourceImages'
 import { BLOCKING_STATUSES, formatDate, formatTime, minutesToTime, overlaps, timeToMinutes } from '@/utils/booking'
 
 const route = useRoute()
@@ -209,9 +210,7 @@ const timetableLabel = (status) => {
       <div class="space-y-6">
         <section class="card">
           <div class="grid gap-6 md:grid-cols-[220px_1fr]">
-            <div class="flex min-h-48 items-center justify-center rounded-xl bg-surface-container-low">
-              <CalendarDays class="h-16 w-16 text-primary" />
-            </div>
+            <img :src="resolveResourceImage(resource)" :alt="`${resource.name} preview`" class="min-h-48 w-full rounded-xl object-cover" />
             <div>
               <div class="mb-3 flex flex-wrap gap-2">
                 <span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface-variant">

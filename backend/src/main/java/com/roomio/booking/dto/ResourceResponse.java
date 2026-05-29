@@ -12,5 +12,6 @@ public record ResourceResponse(
     Integer capacity,
     ResourceStatus status,
     String description,
+    String imageUrl,
     List<String> features) {
 }
