@@ -56,11 +56,9 @@ const logout = () => {
   <div class="min-h-screen bg-background text-on-background md:flex">
     <aside class="hidden w-64 shrink-0 border-r border-outline-variant bg-surface-container-low p-4 md:flex md:min-h-screen md:flex-col">
       <RouterLink :to="{ name: role === 'admin' ? 'admin-dashboard' : 'student-dashboard' }" class="mb-6 flex items-center gap-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded-control bg-primary-container text-on-primary-container">
-          <LibraryBig class="h-5 w-5" />
-        </div>
+        <img src="/logo/logo_normal.png" alt="RooMio logo" class="h-10 w-10 rounded-control object-contain" />
         <div>
-          <p class="text-lg font-bold text-primary">CampusResource</p>
+          <p class="text-lg font-bold text-primary">RooMio</p>
           <p class="text-xs font-semibold uppercase tracking-[0.05em] text-on-surface-variant">University Portal</p>
         </div>
       </RouterLink>
@@ -99,8 +97,9 @@ const logout = () => {
 
     <main class="flex min-w-0 flex-1 flex-col">
       <header class="sticky top-0 z-30 flex items-center justify-between border-b border-outline-variant bg-surface-container-lowest/95 px-4 py-3 backdrop-blur md:hidden">
-        <RouterLink :to="{ name: role === 'admin' ? 'admin-dashboard' : 'student-dashboard' }" class="font-bold text-primary">
-          CampusResource
+        <RouterLink :to="{ name: role === 'admin' ? 'admin-dashboard' : 'student-dashboard' }" class="flex items-center gap-2 font-bold text-primary">
+          <img src="/logo/logo_normal.png" alt="RooMio logo" class="h-8 w-8 rounded-control object-contain" />
+          RooMio
         </RouterLink>
         <button class="rounded-control p-2 text-on-surface-variant" @click="logout" aria-label="Logout">
           <LogOut class="h-5 w-5" />

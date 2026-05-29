@@ -1,6 +1,19 @@
 <script setup>
-import { ArrowRight, BarChart3, CalendarCheck2, CheckCircle2, Lightbulb, ShieldCheck } from '@lucide/vue'
+import { ArrowRight, BarChart3, CheckCircle2, Lightbulb, ShieldCheck } from '@lucide/vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+
+const handleFeaturePointerMove = (event) => {
+  const card = event.currentTarget
+  const bounds = card.getBoundingClientRect()
+
+  card.style.setProperty('--shine-x', `${event.clientX - bounds.left}px`)
+  card.style.setProperty('--shine-y', `${event.clientY - bounds.top}px`)
+}
+
+const handleFeaturePointerLeave = (event) => {
+  event.currentTarget.style.removeProperty('--shine-x')
+  event.currentTarget.style.removeProperty('--shine-y')
+}
 </script>
 
 <template>
@@ -8,10 +21,8 @@ import BaseButton from '@/components/ui/BaseButton.vue'
     <header class="sticky top-0 z-40 border-b border-surface-variant bg-surface-container-lowest/90 backdrop-blur">
       <div class="mx-auto flex max-w-container items-center justify-between px-4 py-3 md:px-8">
         <RouterLink to="/" class="flex items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-control bg-primary-container text-on-primary-container">
-            <CalendarCheck2 class="h-5 w-5" />
-          </div>
-          <span class="font-semibold text-primary">Smart Campus Booking System</span>
+          <img src="/logo/logo_normal.png" alt="RooMio logo" class="h-10 w-10 rounded-control object-contain" />
+          <span class="font-semibold text-primary">RooMio</span>
         </RouterLink>
         <nav class="hidden items-center gap-6 text-sm font-medium text-on-surface-variant md:flex">
           <a href="#features" class="hover:text-primary">Features</a>
@@ -30,7 +41,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
     <main>
       <section class="mx-auto grid min-h-[calc(100vh-68px)] max-w-container items-center gap-10 px-4 py-14 md:grid-cols-[1fr_0.95fr] md:px-8">
         <div>
-          <p class="label-caps mb-4">CampusResource</p>
+          <p class="label-caps mb-4">RooMio</p>
           <h1 class="page-title max-w-2xl">
             Book campus spaces without the <span class="text-primary">back-and-forth</span>.
           </h1>
@@ -95,30 +106,54 @@ import BaseButton from '@/components/ui/BaseButton.vue'
               A practical product interface for students and administrators who need reliable resource visibility.
             </p>
           </div>
-          <div class="grid gap-6 md:grid-cols-3">
-            <article class="card md:col-span-2">
-              <ShieldCheck class="mb-5 h-10 w-10 rounded-control bg-primary-fixed p-2 text-on-primary-fixed" />
-              <h3 class="text-xl font-semibold">Conflict-free booking</h3>
-              <p class="mt-2 text-on-surface-variant">
-                Overlap detection blocks double bookings before they reach the timetable.
-              </p>
+          <div class="feature-stack">
+            <article
+              class="feature-bar"
+              @pointermove="handleFeaturePointerMove"
+              @pointerleave="handleFeaturePointerLeave"
+            >
+              <ShieldCheck class="feature-bar__icon bg-primary-fixed text-on-primary-fixed" />
+              <div class="feature-bar__content">
+                <h3 class="text-xl font-semibold">Conflict-free booking</h3>
+                <p class="mt-2 text-on-surface-variant">
+                  Overlap detection blocks double bookings before they reach the timetable.
+                </p>
+              </div>
             </article>
-            <article class="card">
-              <CheckCircle2 class="mb-5 h-10 w-10 rounded-control bg-tertiary-fixed p-2 text-on-tertiary-fixed-variant" />
-              <h3 class="text-xl font-semibold">Real availability</h3>
-              <p class="mt-2 text-on-surface-variant">Students can see what is active, available, and suitable.</p>
+            <article
+              class="feature-bar"
+              @pointermove="handleFeaturePointerMove"
+              @pointerleave="handleFeaturePointerLeave"
+            >
+              <CheckCircle2 class="feature-bar__icon bg-tertiary-fixed text-on-tertiary-fixed-variant" />
+              <div class="feature-bar__content">
+                <h3 class="text-xl font-semibold">Real availability</h3>
+                <p class="mt-2 text-on-surface-variant">Students can see what is active, available, and suitable.</p>
+              </div>
             </article>
-            <article class="card">
-              <Lightbulb class="mb-5 h-10 w-10 rounded-control bg-secondary-fixed p-2 text-on-secondary-fixed-variant" />
-              <h3 class="text-xl font-semibold">Smart alternatives</h3>
-              <p class="mt-2 text-on-surface-variant">When a slot fails, users get nearby times and similar spaces.</p>
+            <article
+              class="feature-bar"
+              @pointermove="handleFeaturePointerMove"
+              @pointerleave="handleFeaturePointerLeave"
+            >
+              <Lightbulb class="feature-bar__icon bg-secondary-fixed text-on-secondary-fixed-variant" />
+              <div class="feature-bar__content">
+                <h3 class="text-xl font-semibold">Smart alternatives</h3>
+                <p class="mt-2 text-on-surface-variant">When a slot fails, users get nearby times and similar spaces.</p>
+              </div>
             </article>
-            <article class="card md:col-span-2">
-              <BarChart3 class="mb-5 h-10 w-10 rounded-control bg-primary-fixed p-2 text-on-primary-fixed" />
-              <h3 class="text-xl font-semibold">Admin analytics</h3>
-              <p class="mt-2 text-on-surface-variant">
-                Resource usage, status distribution, peak hours, cancellations, and no-shows are visible at a glance.
-              </p>
+            <article
+              class="feature-bar"
+              @pointermove="handleFeaturePointerMove"
+              @pointerleave="handleFeaturePointerLeave"
+            >
+              <BarChart3 class="feature-bar__icon bg-primary-fixed text-on-primary-fixed" />
+              <div class="feature-bar__content">
+                <h3 class="text-xl font-semibold">Admin analytics</h3>
+                <p class="mt-2 text-on-surface-variant">
+                  Resource usage, status distribution, peak hours, cancellations, and no-shows are visible at a glance.
+                </p>
+              </div>
             </article>
           </div>
         </div>
@@ -148,7 +183,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 
     <footer class="bg-inverse-surface px-4 py-8 text-inverse-on-surface md:px-8">
       <div class="mx-auto flex max-w-container flex-col justify-between gap-4 md:flex-row md:items-center">
-        <p class="font-semibold text-inverse-primary">Smart Campus Booking System</p>
+        <p class="font-semibold text-inverse-primary">RooMio</p>
         <p class="text-sm text-surface-container-highest">Demo-ready Vue 3 frontend for campus resource bookings.</p>
       </div>
     </footer>

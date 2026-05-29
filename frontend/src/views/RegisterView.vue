@@ -33,9 +33,9 @@ const submit = async () => {
 <template>
   <main class="flex min-h-screen items-center justify-center bg-background px-4 py-10">
     <form class="card w-full max-w-lg" @submit.prevent="submit">
-      <RouterLink to="/" class="mb-8 block font-semibold text-primary">CampusResource</RouterLink>
+      <RouterLink to="/" class="mb-8 block font-semibold text-primary">RooMio</RouterLink>
       <h1 class="page-title text-primary">Create student account</h1>
-      <p class="mt-2 text-on-surface-variant">Join CampusResource to manage your bookings.</p>
+      <p class="mt-2 text-on-surface-variant">Join RooMio to manage your bookings.</p>
 
       <AlertCard v-if="error" class="mt-6" tone="error" title="Registration issue">{{ error }}</AlertCard>
 

@@ -37,9 +37,9 @@ const submit = async () => {
 <template>
   <main class="grid min-h-screen bg-background md:grid-cols-[0.95fr_1fr]">
     <section class="hidden bg-primary p-10 text-on-primary md:flex md:flex-col md:justify-between">
-      <RouterLink to="/" class="font-semibold text-inverse-primary">CampusResource</RouterLink>
+      <RouterLink to="/" class="font-semibold text-inverse-primary">RooMio</RouterLink>
       <div>
-        <p class="label-caps !text-inverse-primary">Smart Campus Booking System</p>
+        <p class="label-caps !text-inverse-primary">RooMio</p>
         <h1 class="mt-4 max-w-xl text-4xl font-bold leading-tight tracking-normal">
           Keep resource reservations clear, fast, and conflict-free.
         </h1>
@@ -53,7 +53,7 @@ const submit = async () => {
           <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-control bg-primary-fixed text-on-primary-fixed">
             <LockKeyhole class="h-6 w-6" />
           </div>
-          <h1 class="page-title text-primary">CampusResource</h1>
+          <h1 class="page-title text-primary">RooMio</h1>
           <p class="mt-2 text-on-surface-variant">Login to manage campus bookings.</p>
         </div>
 
