@@ -42,6 +42,14 @@ public class User {
 
   private Instant pendingTwoFactorExpiresAt;
 
+  private String passwordResetCode;
+
+  private Instant passwordResetCodeExpiresAt;
+
+  private String passwordResetToken;
+
+  private Instant passwordResetExpiresAt;
+
   @Column(nullable = false)
   private boolean bookingAlertsEnabled;
 
@@ -153,6 +161,38 @@ public class User {
 
   public void setPendingTwoFactorExpiresAt(Instant pendingTwoFactorExpiresAt) {
     this.pendingTwoFactorExpiresAt = pendingTwoFactorExpiresAt;
+  }
+
+  public String getPasswordResetCode() {
+    return passwordResetCode;
+  }
+
+  public void setPasswordResetCode(String passwordResetCode) {
+    this.passwordResetCode = passwordResetCode;
+  }
+
+  public Instant getPasswordResetCodeExpiresAt() {
+    return passwordResetCodeExpiresAt;
+  }
+
+  public void setPasswordResetCodeExpiresAt(Instant passwordResetCodeExpiresAt) {
+    this.passwordResetCodeExpiresAt = passwordResetCodeExpiresAt;
+  }
+
+  public String getPasswordResetToken() {
+    return passwordResetToken;
+  }
+
+  public void setPasswordResetToken(String passwordResetToken) {
+    this.passwordResetToken = passwordResetToken;
+  }
+
+  public Instant getPasswordResetExpiresAt() {
+    return passwordResetExpiresAt;
+  }
+
+  public void setPasswordResetExpiresAt(Instant passwordResetExpiresAt) {
+    this.passwordResetExpiresAt = passwordResetExpiresAt;
   }
 
   public boolean isBookingAlertsEnabled() {

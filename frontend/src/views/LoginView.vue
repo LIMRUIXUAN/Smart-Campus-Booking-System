@@ -39,6 +39,10 @@ const currentSticker = computed(() => stickers[stickerIndex.value])
 const selectedDemoAccount = computed(
   () => demoAccounts.find((account) => account.role === selectedDemoRole.value) ?? demoAccounts[0],
 )
+const forgotPasswordRoute = computed(() => ({
+  name: 'reset-password',
+  query: email.value ? { email: email.value } : {},
+}))
 
 let stickerIntervalId
 
@@ -70,6 +74,9 @@ const submit = async () => {
 }
 
 onMounted(() => {
+  if (route.query.email) {
+    email.value = String(route.query.email)
+  }
   stickerIntervalId = window.setInterval(rotateSticker, 8000)
 })
 
@@ -115,6 +122,12 @@ onBeforeUnmount(() => {
         <input v-model="email" class="field mb-4" type="email" autocomplete="email" required />
         <label class="mb-2 block text-sm font-semibold text-on-surface">Password</label>
         <input v-model="password" class="field mb-6" type="password" autocomplete="current-password" required />
+
+        <div class="mb-6 -mt-2 text-right">
+          <RouterLink :to="forgotPasswordRoute" class="text-sm font-semibold text-primary">
+            Forgot password?
+          </RouterLink>
+        </div>
 
         <BaseButton type="submit" class="w-full" :disabled="auth.loading">
           {{ auth.loading ? 'Signing in...' : 'Login' }}

@@ -2,9 +2,14 @@ package com.roomio.booking.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 
 import com.roomio.booking.dto.ChangePasswordRequest;
 import com.roomio.booking.dto.CodeConfirmationRequest;
+import com.roomio.booking.dto.PasswordResetCodeVerifyRequest;
+import com.roomio.booking.dto.PasswordResetConfirmRequest;
+import com.roomio.booking.dto.PasswordResetRequest;
 import com.roomio.booking.dto.PasswordConfirmationRequest;
 import com.roomio.booking.dto.RegisterRequest;
 import com.roomio.booking.dto.UpdateNotificationSettingsRequest;
@@ -16,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +37,9 @@ class AuthServiceTest {
 
   @Autowired
   PasswordEncoder passwordEncoder;
+
+  @MockBean
+  PasswordResetMailer passwordResetMailer;
 
   @BeforeEach
   void setUp() {
@@ -140,5 +149,50 @@ class AuthServiceTest {
     assertThat(updated.user().bookingAlertsEnabled()).isFalse();
     assertThat(updated.user().emailDigestEnabled()).isTrue();
     assertThat(updated.user().pushNotificationsEnabled()).isFalse();
+  }
+
+  @Test
+  void passwordResetRoundTripUpdatesStoredHash() {
+    authService.register(new RegisterRequest("Alya Tan", "student@campus.test", "password"));
+
+    var challenge = authService.requestPasswordReset(new PasswordResetRequest("student@campus.test"));
+    var verification = authService.verifyPasswordResetCode(
+      new PasswordResetCodeVerifyRequest("student@campus.test", users.findByEmailIgnoreCase("student@campus.test").orElseThrow().getPasswordResetCode()));
+    var result = authService.resetPassword(new PasswordResetConfirmRequest(verification.token(), "newpass1"));
+
+    assertThat(result.message()).contains("Password reset successfully");
+    assertThat(challenge.expiresAt()).isNotNull();
+    User updated = users.findByEmailIgnoreCase("student@campus.test").orElseThrow();
+    assertThat(passwordEncoder.matches("newpass1", updated.getPasswordHash())).isTrue();
+    assertThat(updated.getPasswordResetToken()).isNull();
+    verify(passwordResetMailer).sendPasswordResetPin(anyString(), anyString(), anyString());
+  }
+
+  @Test
+  void passwordResetRejectsInvalidToken() {
+    authService.register(new RegisterRequest("Alya Tan", "student@campus.test", "password"));
+
+    assertThatThrownBy(() -> authService.resetPassword(new PasswordResetConfirmRequest("bad-token", "newpass1")))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("invalid or expired");
+  }
+
+  @Test
+  void passwordResetForUnknownEmailReturnsGenericResponse() {
+    var challenge = authService.requestPasswordReset(new PasswordResetRequest("missing@campus.test"));
+
+    assertThat(challenge.expiresAt()).isNull();
+    assertThat(challenge.message()).contains("If that email exists");
+  }
+
+  @Test
+  void passwordResetVerifyRejectsWrongCode() {
+    authService.register(new RegisterRequest("Alya Tan", "student@campus.test", "password"));
+    authService.requestPasswordReset(new PasswordResetRequest("student@campus.test"));
+
+    assertThatThrownBy(() -> authService.verifyPasswordResetCode(
+      new PasswordResetCodeVerifyRequest("student@campus.test", "9999")))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Reset PIN is invalid or expired");
   }
 }

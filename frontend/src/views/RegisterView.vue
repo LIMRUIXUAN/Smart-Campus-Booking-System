@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import AlertCard from '@/components/ui/AlertCard.vue'
@@ -14,6 +14,21 @@ const form = ref({
   confirmPassword: '',
 })
 const error = ref('')
+const stickers = [
+  '/sticker/sticker_hi.png',
+  '/sticker/sticker_laugh.png',
+  '/sticker/sticker_play.png',
+  '/sticker/sticker_thumb.png',
+  '/sticker/sticker_wait.png',
+]
+const stickerIndex = ref(0)
+const currentSticker = computed(() => stickers[stickerIndex.value])
+
+let stickerIntervalId
+
+const rotateSticker = () => {
+  stickerIndex.value = (stickerIndex.value + 1) % stickers.length
+}
 
 const submit = async () => {
   error.value = ''
@@ -28,12 +43,32 @@ const submit = async () => {
     error.value = err.message
   }
 }
+
+onMounted(() => {
+  stickerIntervalId = window.setInterval(rotateSticker, 8000)
+})
+
+onBeforeUnmount(() => {
+  if (stickerIntervalId) {
+    window.clearInterval(stickerIntervalId)
+  }
+})
 </script>
 
 <template>
   <main class="flex min-h-screen items-center justify-center bg-background px-4 py-10">
     <form class="card w-full max-w-lg" @submit.prevent="submit">
-      <RouterLink to="/" class="mb-8 block font-semibold text-primary">RooMio</RouterLink>
+      <div class="mb-8 text-center">
+        <div class="mx-auto mb-4 flex h-24 w-24 items-center justify-center">
+          <img
+            :key="currentSticker"
+            :src="currentSticker"
+            alt="RooMio sticker"
+            class="register-sticker"
+          />
+        </div>
+        <RouterLink to="/" class="block font-semibold text-primary">RooMio</RouterLink>
+      </div>
       <h1 class="page-title text-primary">Create student account</h1>
       <p class="mt-2 text-on-surface-variant">Join RooMio to manage your bookings.</p>
 
@@ -68,3 +103,30 @@ const submit = async () => {
     </form>
   </main>
 </template>
+
+<style scoped>
+.register-sticker {
+  width: 9.5rem;
+  height: 9.5rem;
+  object-fit: contain;
+  animation: register-sticker-pop 420ms cubic-bezier(0.2, 0.9, 0.25, 1.15);
+  transform-origin: center;
+}
+
+@keyframes register-sticker-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(6px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.14) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+</style>

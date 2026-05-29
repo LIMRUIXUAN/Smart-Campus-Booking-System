@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 import LandingView from '@/views/LandingView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import ResetPasswordView from '@/views/ResetPasswordView.vue'
 import StudentDashboardView from '@/views/student/StudentDashboardView.vue'
 import StudentResourcesView from '@/views/student/StudentResourcesView.vue'
 import ResourceDetailsView from '@/views/student/ResourceDetailsView.vue'
@@ -16,6 +17,7 @@ const routes = [
   { path: '/', name: 'landing', component: LandingView },
   { path: '/login', name: 'login', component: LoginView },
   { path: '/register', name: 'register', component: RegisterView },
+  { path: '/reset-password', name: 'reset-password', component: ResetPasswordView },
   {
     path: '/student',
     name: 'student-dashboard',

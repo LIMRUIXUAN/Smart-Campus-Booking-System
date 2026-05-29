@@ -5,6 +5,11 @@ import com.roomio.booking.dto.AuthRequest;
 import com.roomio.booking.dto.AuthResponse;
 import com.roomio.booking.dto.ChangePasswordRequest;
 import com.roomio.booking.dto.CodeConfirmationRequest;
+import com.roomio.booking.dto.PasswordResetChallengeResponse;
+import com.roomio.booking.dto.PasswordResetCodeVerifyRequest;
+import com.roomio.booking.dto.PasswordResetConfirmRequest;
+import com.roomio.booking.dto.PasswordResetRequest;
+import com.roomio.booking.dto.PasswordResetVerificationResponse;
 import com.roomio.booking.dto.PasswordConfirmationRequest;
 import com.roomio.booking.dto.RegisterRequest;
 import com.roomio.booking.dto.UpdateNotificationSettingsRequest;
@@ -16,6 +21,7 @@ import com.roomio.booking.repository.UserRepository;
 import com.roomio.booking.security.JwtService;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,11 +33,17 @@ public class AuthService {
   private final UserRepository users;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
+  private final PasswordResetMailer passwordResetMailer;
 
-  public AuthService(UserRepository users, PasswordEncoder passwordEncoder, JwtService jwtService) {
+  public AuthService(
+      UserRepository users,
+      PasswordEncoder passwordEncoder,
+      JwtService jwtService,
+      PasswordResetMailer passwordResetMailer) {
     this.users = users;
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
+    this.passwordResetMailer = passwordResetMailer;
   }
 
   @Transactional
@@ -86,6 +98,10 @@ public class AuthService {
       user.setTwoFactorEnabled(false);
       user.setPendingTwoFactorCode(null);
       user.setPendingTwoFactorExpiresAt(null);
+      user.setPasswordResetCode(null);
+      user.setPasswordResetCodeExpiresAt(null);
+      user.setPasswordResetToken(null);
+      user.setPasswordResetExpiresAt(null);
     }
 
     return new AuthResponse(Mappers.user(user), jwtService.issue(user));
@@ -105,7 +121,88 @@ public class AuthService {
     }
 
     user.setPasswordHash(passwordEncoder.encode(nextPassword));
+    user.setPasswordResetCode(null);
+    user.setPasswordResetCodeExpiresAt(null);
+    user.setPasswordResetToken(null);
+    user.setPasswordResetExpiresAt(null);
     return new ActionResponse("Password updated successfully.");
+  }
+
+  @Transactional
+  public PasswordResetChallengeResponse requestPasswordReset(PasswordResetRequest request) {
+    String email = request.email().trim().toLowerCase(Locale.ROOT);
+    User user = users.findByEmailIgnoreCase(email).orElse(null);
+    if (user == null) {
+      return new PasswordResetChallengeResponse(
+        "If that email exists, a 4-digit PIN has been sent.",
+        email,
+        null);
+    }
+
+    String pin = issuePin();
+    Instant expiresAt = Instant.now().plusSeconds(900);
+    user.setPasswordResetCode(pin);
+    user.setPasswordResetCodeExpiresAt(expiresAt);
+    user.setPasswordResetToken(null);
+    user.setPasswordResetExpiresAt(null);
+    passwordResetMailer.sendPasswordResetPin(user.getEmail(), user.getName(), pin);
+    return new PasswordResetChallengeResponse(
+      "A 4-digit PIN has been sent to your email.",
+      user.getEmail(),
+      expiresAt);
+  }
+
+  @Transactional
+  public PasswordResetVerificationResponse verifyPasswordResetCode(PasswordResetCodeVerifyRequest request) {
+    String email = request.email().trim().toLowerCase(Locale.ROOT);
+    User user = users.findByEmailIgnoreCase(email)
+      .orElseThrow(() -> new IllegalArgumentException("Reset PIN is invalid or expired."));
+
+    validateCode(
+      user.getPasswordResetCode(),
+      user.getPasswordResetCodeExpiresAt(),
+      request.code(),
+      "Reset PIN is invalid or expired.");
+
+    user.setPasswordResetCode(null);
+    user.setPasswordResetCodeExpiresAt(null);
+
+    String token = issueResetToken();
+    Instant expiresAt = Instant.now().plusSeconds(900);
+    user.setPasswordResetToken(token);
+    user.setPasswordResetExpiresAt(expiresAt);
+
+    return new PasswordResetVerificationResponse(
+      "PIN verified. You can now create a new password.",
+      token,
+      expiresAt);
+  }
+
+  @Transactional
+  public ActionResponse resetPassword(PasswordResetConfirmRequest request) {
+    User user = users.findByPasswordResetToken(request.token().trim())
+      .orElseThrow(() -> new IllegalArgumentException("Reset token is invalid or expired."));
+
+    Instant expiresAt = user.getPasswordResetExpiresAt();
+    if (expiresAt == null || Instant.now().isAfter(expiresAt)) {
+      user.setPasswordResetToken(null);
+      user.setPasswordResetExpiresAt(null);
+      throw new IllegalArgumentException("Reset token is invalid or expired.");
+    }
+
+    String nextPassword = request.newPassword().trim();
+    if (passwordEncoder.matches(nextPassword, user.getPasswordHash())) {
+      throw new IllegalArgumentException("New password must be different from the current password.");
+    }
+
+    user.setPasswordHash(passwordEncoder.encode(nextPassword));
+    user.setPasswordResetCode(null);
+    user.setPasswordResetCodeExpiresAt(null);
+    user.setPasswordResetToken(null);
+    user.setPasswordResetExpiresAt(null);
+    user.setPendingTwoFactorCode(null);
+    user.setPendingTwoFactorExpiresAt(null);
+    return new ActionResponse("Password reset successfully. You can now log in.");
   }
 
   @Transactional
@@ -191,6 +288,14 @@ public class AuthService {
 
   private String issueCode() {
     return String.format("%06d", ThreadLocalRandom.current().nextInt(0, 1_000_000));
+  }
+
+  private String issuePin() {
+    return String.format("%04d", ThreadLocalRandom.current().nextInt(0, 10_000));
+  }
+
+  private String issueResetToken() {
+    return UUID.randomUUID().toString().replace("-", "");
   }
 
   private void validateCode(String storedCode, Instant expiresAt, String submittedCode, String message) {

@@ -5,6 +5,11 @@ import com.roomio.booking.dto.AuthRequest;
 import com.roomio.booking.dto.AuthResponse;
 import com.roomio.booking.dto.ChangePasswordRequest;
 import com.roomio.booking.dto.CodeConfirmationRequest;
+import com.roomio.booking.dto.PasswordResetChallengeResponse;
+import com.roomio.booking.dto.PasswordResetCodeVerifyRequest;
+import com.roomio.booking.dto.PasswordResetConfirmRequest;
+import com.roomio.booking.dto.PasswordResetRequest;
+import com.roomio.booking.dto.PasswordResetVerificationResponse;
 import com.roomio.booking.dto.PasswordConfirmationRequest;
 import com.roomio.booking.dto.RegisterRequest;
 import com.roomio.booking.dto.UpdateNotificationSettingsRequest;
@@ -37,6 +42,22 @@ public class AuthController {
   @PostMapping("/login")
   public AuthResponse login(@Valid @RequestBody AuthRequest request) {
     return authService.login(request);
+  }
+
+  @PostMapping("/password-reset/request")
+  public PasswordResetChallengeResponse requestPasswordReset(@Valid @RequestBody PasswordResetRequest request) {
+    return authService.requestPasswordReset(request);
+  }
+
+  @PostMapping("/password-reset/verify")
+  public PasswordResetVerificationResponse verifyPasswordResetCode(
+      @Valid @RequestBody PasswordResetCodeVerifyRequest request) {
+    return authService.verifyPasswordResetCode(request);
+  }
+
+  @PostMapping("/password-reset/confirm")
+  public ActionResponse resetPassword(@Valid @RequestBody PasswordResetConfirmRequest request) {
+    return authService.resetPassword(request);
   }
 
   @PutMapping("/me")

@@ -79,6 +79,39 @@ export const api = {
     }
   },
 
+  async requestPasswordReset(email) {
+    try {
+      const { data } = await client.post('/auth/password-reset/request', { email })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async verifyPasswordResetCode(payload) {
+    try {
+      const { data } = await client.post('/auth/password-reset/verify', {
+        email: payload.email,
+        code: payload.code,
+      })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
+  async resetPassword(payload) {
+    try {
+      const { data } = await client.post('/auth/password-reset/confirm', {
+        token: payload.token,
+        newPassword: payload.newPassword,
+      })
+      return data
+    } catch (error) {
+      throw normalizeError(error)
+    }
+  },
+
   async updateProfile(payload) {
     try {
       const { data } = await client.put('/auth/me', {
