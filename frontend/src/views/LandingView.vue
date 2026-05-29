@@ -1,6 +1,7 @@
 <script setup>
 import { ArrowRight, BarChart3, CheckCircle2, Lightbulb, ShieldCheck } from '@lucide/vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import TextColorHero from '@/components/ui/TextColorHero.vue'
 
 const handleFeaturePointerMove = (event) => {
   const card = event.currentTarget
@@ -39,12 +40,9 @@ const handleFeaturePointerLeave = (event) => {
     </header>
 
     <main>
-      <section class="mx-auto grid min-h-[calc(100vh-68px)] max-w-container items-center gap-10 px-4 py-14 md:grid-cols-[1fr_0.95fr] md:px-8">
+      <section class="mx-auto grid min-h-[calc(100vh-68px)] max-w-container items-start gap-10 px-4 py-14 md:grid-cols-[1fr_0.95fr] md:px-8">
         <div>
-          <p class="label-caps mb-4">RooMio</p>
-          <h1 class="page-title max-w-2xl">
-            Book campus spaces without the <span class="text-primary">back-and-forth</span>.
-          </h1>
+          <TextColorHero />
           <p class="mt-5 max-w-xl text-lg leading-8 text-on-surface-variant">
             Smart Campus Booking helps students reserve study rooms, labs, and shared resources with live availability,
             conflict prevention, and useful admin analytics.
