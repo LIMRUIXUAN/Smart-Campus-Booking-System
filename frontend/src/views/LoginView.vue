@@ -1,7 +1,6 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { LockKeyhole } from '@lucide/vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import AlertCard from '@/components/ui/AlertCard.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -12,6 +11,21 @@ const route = useRoute()
 const email = ref('student@campus.test')
 const password = ref('password')
 const error = ref('')
+const stickers = [
+  '/sticker/sticker_hi.png',
+  '/sticker/sticker_laugh.png',
+  '/sticker/sticker_play.png',
+  '/sticker/sticker_thumb.png',
+  '/sticker/sticker_wait.png',
+]
+const stickerIndex = ref(0)
+const currentSticker = computed(() => stickers[stickerIndex.value])
+
+let stickerIntervalId
+
+const rotateSticker = () => {
+  stickerIndex.value = (stickerIndex.value + 1) % stickers.length
+}
 
 const fillDemo = (role) => {
   email.value = role === 'admin' ? 'admin@campus.test' : 'student@campus.test'
@@ -32,6 +46,16 @@ const submit = async () => {
     error.value = err.message
   }
 }
+
+onMounted(() => {
+  stickerIntervalId = window.setInterval(rotateSticker, 8000)
+})
+
+onBeforeUnmount(() => {
+  if (stickerIntervalId) {
+    window.clearInterval(stickerIntervalId)
+  }
+})
 </script>
 
 <template>
@@ -50,8 +74,13 @@ const submit = async () => {
     <section class="flex items-center justify-center px-4 py-10">
       <form class="card w-full max-w-md" @submit.prevent="submit">
         <div class="mb-8 text-center">
-          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-control bg-primary-fixed text-on-primary-fixed">
-            <LockKeyhole class="h-6 w-6" />
+          <div class="mx-auto mb-4 flex h-24 w-24 items-center justify-center">
+            <img
+              :key="currentSticker"
+              :src="currentSticker"
+              alt="RooMio sticker"
+              class="login-sticker"
+            />
           </div>
           <h1 class="page-title text-primary">RooMio</h1>
           <p class="mt-2 text-on-surface-variant">Login to manage campus bookings.</p>
@@ -86,3 +115,30 @@ const submit = async () => {
     </section>
   </main>
 </template>
+
+<style scoped>
+.login-sticker {
+  width: 9.5rem;
+  height: 9.5rem;
+  object-fit: contain;
+  animation: login-sticker-pop 420ms cubic-bezier(0.2, 0.9, 0.25, 1.15);
+  transform-origin: center;
+}
+
+@keyframes login-sticker-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(6px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.14) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+</style>
