@@ -21,7 +21,7 @@ The UI should be:
 * Clear in showing booking availability
 * Helpful when conflicts happen
 * Easy to explain during a project pitch
-* Easy to implement using React and Tailwind CSS
+* Easy to implement using Vue and Tailwind CSS
 
 The design follows a modern SaaS dashboard style with a campus productivity theme.
 
@@ -626,3 +626,81 @@ The strongest design points are:
 * Clean SaaS-style interface
 
 This makes the project suitable for an internship technical challenge because it demonstrates both frontend UI design and backend problem-solving logic.
+
+---
+
+## 18. Refined Design Direction
+
+The product should avoid mixing two incompatible UI modes on the same screen. Roomio needs a practical dashboard experience for daily booking work, while selected public pages can use a more premium campus website style.
+
+### 18.1 Primary App Style
+
+Use the clean SaaS dashboard style for all authenticated product screens:
+
+* Student dashboard
+* Student resource explorer
+* Resource booking form
+* My Bookings
+* Profile settings
+* Admin dashboard
+* Admin resource management
+* Admin booking management
+
+Design rules:
+
+* Prioritize speed, clarity, and repeat use.
+* Keep navigation predictable with sidebar/topbar patterns.
+* Use compact cards, tables, filters, forms, badges, and charts.
+* Keep colors calm and functional.
+* Avoid oversized marketing sections inside admin or booking workflows.
+* Make booking status, conflict feedback, and next actions obvious.
+
+### 18.2 Public / Marketing Style
+
+Use the premium campus website style only for public-facing pages:
+
+* Landing page
+* Public resource showcase
+* Client pitch page
+* Optional resource detail hero area
+
+Key design functions to keep:
+
+* Full-screen or tall photographic hero with dark overlay.
+* Large bottom-aligned title or product message.
+* Sticky transparent header that becomes solid on scroll.
+* Smooth search overlay or menu overlay.
+* White content section that visually overlaps the hero.
+* Large rounded section corner for a campus-brand feel.
+* Image-based cards for rooms, labs, equipment, and facilities.
+* Black footer with a curved or wave-like top divider.
+
+### 18.3 Transition Functions To Keep
+
+Transitions should support clarity, not decoration.
+
+* Header transition: slide, shrink, or change background on scroll.
+* Search transition: fade in/out with focus placed in the search input.
+* Menu transition: open as a full-screen or side overlay with clear close action.
+* Hero transition: next content section overlaps the hero smoothly on scroll.
+* Card transition: image overlay darkens slightly on hover or focus.
+* Anchor transition: sticky tabs highlight the active page section.
+* Back-to-top transition: smooth scroll to top.
+
+Avoid:
+
+* Heavy animation inside booking forms.
+* Motion that changes layout while the user is selecting date/time.
+* Multiple competing navigation systems on the same screen.
+* Large hero sections inside admin dashboards.
+* Decorative transitions that hide important availability or error messages.
+
+### 18.4 Prompt For Generating The Public Page Style
+
+```text
+Create a premium university-style landing page for a smart campus booking platform. Use a tall photographic campus or library hero with a dark overlay, large bottom-aligned headline, sticky transparent header, search icon, menu button, and clear book-now action. Let the next white content section overlap the hero with one large rounded corner. Include concise sections for rooms, labs, equipment, conflict-free booking, smart suggestions, and admin analytics. Use image-based cards, subtle hover overlays, smooth header/search/menu transitions, sticky anchor tabs for sections, and a black footer with a curved top divider. The mood should feel academic, polished, modern, trustworthy, and suitable for a university facilities website.
+```
+
+### 18.5 Final Design Rule
+
+Roomio should feel operational after login and aspirational before login. The public pages can attract and explain; the authenticated app must help users book, manage, and analyse resources with minimum friction.
